@@ -19,7 +19,9 @@ Cell::Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction) :
 {
 	F_dist = G_dist + H_dist;
 	solid = _solid;
-	c = ' ';
+	
+	c = (solid) ? '#' : ' ';
+
 	pos = Position(_x, _y);
 	dir = _direction;
 	//available = false;
@@ -53,4 +55,14 @@ bool& Cell::getChecked()
 void Cell::checked() 
 {
 	this->isChecked = true;
+}
+
+void Cell::draw()
+{
+
+}
+
+std::ostream& operator<<(std::ostream& os, const Cell& cell)
+{
+	return os << cell.c;
 }
