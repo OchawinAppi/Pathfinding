@@ -6,15 +6,17 @@ Cell::Cell()
 	H_dist = 0;
 	F_dist = 0;
 
-	pos = Position(0, 0);
+	pos = Position(-1, -1);
 	dir = Direction::NONE;
 
+	c = ' ';
 	solid = false;
 	isChecked = false;
 }
 
 Cell::Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction) :
-	G_dist(g), H_dist(h) {
+	G_dist(g), H_dist(h) 
+{
 	F_dist = G_dist + H_dist;
 	solid = _solid;
 	c = ' ';

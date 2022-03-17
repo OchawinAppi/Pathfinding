@@ -154,7 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="Position.cpp" />
   </ItemGroup>
   <ItemGroup>
