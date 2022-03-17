@@ -359,5 +359,18 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
+# ignore stuff from SFML.Net
+
+obj/
+lib/
+examples/*/*.dll
+examples/*/*.xml
+*.exe
+*.manifest
+*.pdb
+*.suo
+*.csproj.user
+*.VC.db
+
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
