@@ -12,7 +12,6 @@ class Grid
 private:
 	std::vector<std::vector<Cell>> grid;
 public:
-
 	// Constructor
 	Grid(int x, int y);
 
@@ -30,6 +29,6 @@ public:
 	// Getting Specific cell ( will need this later )
 	Cell& at(int x, int y);
 
-	
+	bool inBounds(int y, int size);
 };
 

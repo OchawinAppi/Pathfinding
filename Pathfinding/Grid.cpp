@@ -60,5 +60,9 @@ Cell& Grid::at(int x, int y)
 	return grid.at(y).at(x);
 }
 
+bool Grid::inBounds(int y, int size) 
+{
+	return (y > 0 && y < size);
+}
 
 

@@ -41,21 +41,13 @@ Cell::Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction) :
 		(pos.y * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_HEIGHT / 2) * DEFAULT_TILE_SIZE
 	);
 
-	if (solid)
-	{
-		tile.setFillColor(sf::Color::White);
-	}
-	else
-	{
-		tile.setFillColor(sf::Color::Black);
-	}
-
 	//available = false;
 }
 
 void Cell::makeSolid() 
 {
 	this->solid = true;
+	this->c = '#';
 }
 
 void Cell::updateG(int n) 
@@ -85,6 +77,14 @@ void Cell::checked()
 
 void Cell::draw(sf::RenderWindow &window)
 {
+	if (solid)
+	{
+		tile.setFillColor(sf::Color::White);
+	}
+	else
+	{
+		tile.setFillColor(sf::Color::Black);
+	}
 	window.draw(tile);
 }
 

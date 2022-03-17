@@ -15,7 +15,7 @@ public:
 	Direction dir; // <- direction leading to parent cell ( for forming path later )
 
 	bool solid; // <- Won't evaluate solid cells ( walls )
-	char c; // <- for printing on console ( pre-sfml )
+	char c; // <- for printing on console ( pre-sfml ) AND conditional checking!
 	bool isChecked = false; // <- for A-Star
 
 	// SFML
