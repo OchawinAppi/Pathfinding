@@ -1,13 +1,29 @@
-#include <SFML/Graphics.hpp>
 #include "Grid.h"
 
 
 int main()
 {
     
-    Grid map{ 16, 9 };
-    
-    std::cout << map;
+    Grid map{ MAP_WIDTH, MAP_HEIGHT };
 
-    return 0;
+    map.print();
+
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Path Finding");
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.clear();
+        
+        // DRAWING
+        map.draw(window);
+
+        window.display();
+    }
 }

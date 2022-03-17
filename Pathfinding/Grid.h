@@ -20,11 +20,16 @@ public:
 
 	// Methods 
 
-	// Displaying
+	// Displaying - Console
 	void print();
 	friend std::ostream& operator<<(std::ostream& os, const Grid& grid);
 
+	// Displaying - SFML
+	void draw(sf::RenderWindow &window);
+
 	// Getting Specific cell ( will need this later )
 	Cell& at(int x, int y);
+
+	
 };
 

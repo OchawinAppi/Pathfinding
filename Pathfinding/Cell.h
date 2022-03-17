@@ -1,7 +1,7 @@
 #pragma once
-#include "Position.h"
 #include "Directions.h"
 #include <SFML/Graphics.hpp>
+#include "Config.h"
 
 
 class Cell {
@@ -11,12 +11,15 @@ public:
 	int H_dist;
 	int F_dist;
 
-	Position pos;
+	sf::Vector2f pos;
 	Direction dir; // <- direction leading to parent cell ( for forming path later )
 
 	bool solid; // <- Won't evaluate solid cells ( walls )
 	char c; // <- for printing on console ( pre-sfml )
 	bool isChecked = false; // <- for A-Star
+
+	// SFML
+	sf::RectangleShape tile;
 
 	// Constructors
 	Cell();
@@ -30,7 +33,7 @@ public:
 	void updateF();
 	bool& getChecked();
 	void checked();
-	void draw(); // <- SFML
+	void draw(sf::RenderWindow& window); // <- SFML
 
 	friend std::ostream& operator<<(std::ostream& os, const Cell& cell);
 

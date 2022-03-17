@@ -6,12 +6,15 @@ Cell::Cell()
 	H_dist = 0;
 	F_dist = 0;
 
-	pos = Position(-1, -1);
+	pos = sf::Vector2f(-1, -1);
 	dir = Direction::NONE;
 
 	c = ' ';
 	solid = false;
 	isChecked = false;
+
+	// SFML
+	tile = sf::RectangleShape{};
 }
 
 Cell::Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction) :
@@ -22,8 +25,31 @@ Cell::Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction) :
 	
 	c = (solid) ? '#' : ' ';
 
-	pos = Position(_x, _y);
+	pos = sf::Vector2f(
+		static_cast<float>(_x), 
+		static_cast<float>(_y)
+	);
 	dir = _direction;
+
+
+
+	tile = sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE));
+
+	// Note: Multiply by 
+	tile.setPosition(
+		(pos.x * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_WIDTH / 2) * DEFAULT_TILE_SIZE,
+		(pos.y * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_HEIGHT / 2) * DEFAULT_TILE_SIZE
+	);
+
+	if (solid)
+	{
+		tile.setFillColor(sf::Color::White);
+	}
+	else
+	{
+		tile.setFillColor(sf::Color::Black);
+	}
+
 	//available = false;
 }
 
@@ -57,9 +83,9 @@ void Cell::checked()
 	this->isChecked = true;
 }
 
-void Cell::draw()
+void Cell::draw(sf::RenderWindow &window)
 {
-
+	window.draw(tile);
 }
 
 std::ostream& operator<<(std::ostream& os, const Cell& cell)
