@@ -16,14 +16,8 @@ Grid::Grid(int x, int y)
 			}
 		}
 	}
-
 	aPos = sf::Vector2f(-1, -1);
 	bPos = sf::Vector2f(-1, -1);
-	curPos = aPos;
-
-	// For A-Star
-	free = {};
-	evaluated = {};
 }
 
 
@@ -59,6 +53,23 @@ void Grid::draw(sf::RenderWindow& window)
 		for (int x = 0; x < static_cast<int>(grid.at(0).size()); x++) {
 			grid.at(y).at(x).draw(window);
 		}
+	}
+}
+
+void Grid::drawPath(sf::RenderWindow& window, std::vector<sf::Vector2f> path)
+{
+	sf::RectangleShape node{};
+	node.setFillColor(sf::Color::Yellow);
+	node.setSize(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE));
+
+	for (const auto& tile : path)
+	{
+		sf::Vector2f correctedPosition(
+			(tile.x * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_WIDTH / 2) * DEFAULT_TILE_SIZE,
+			(tile.y * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_HEIGHT / 2) * DEFAULT_TILE_SIZE
+		);
+		node.setPosition(correctedPosition);
+		window.draw(node);
 	}
 }
 
@@ -127,6 +138,18 @@ void Grid::moveB(const sf::Vector2f &pos)
 	}
 }
 
+void Grid::resetA()
+{
+	aPos.x = -1;
+	aPos.y = -1;
+}
+
+void Grid::resetB()
+{
+	bPos.x = -1;
+	bPos.y = -1;
+}
+
 
 std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos)
 {
@@ -135,9 +158,9 @@ std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos)
 
 	std::vector<Cell*> neighbors{};
 
-	for (size_t _x = x - 1; _x < x + 2; _x++)
+	for (int _x = x - 1; _x < x + 2; _x++)
 	{
-		for (size_t _y = y - 1; _y < y + 2; _y++)
+		for (int _y = y - 1; _y < y + 2; _y++)
 		{
 			if (!(_x == x && _y == y) && this->inBounds(_x, MAP_WIDTH, _y, MAP_HEIGHT))
 			{
@@ -149,6 +172,16 @@ std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos)
 		}
 	}
 	return neighbors;
+}
+
+sf::Vector2f& Grid::getB()
+{
+	return this->bPos;
+}
+
+sf::Vector2f& Grid::getA()
+{
+	return this->aPos;
 }
 
 

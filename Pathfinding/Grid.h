@@ -2,9 +2,8 @@
 
 // Standard libraries
 #include <vector>
-
 #include "Cell.h"
-//#include "A-Star-Functions.h"
+
 
 
 
@@ -18,14 +17,6 @@ private:
 
 	// End node
 	sf::Vector2f bPos;
-
-	// Current node
-	sf::Vector2f curPos;
-
-
-	// For A-Star
-	std::vector<Cell> free;			// Cells not evaluated
-	std::vector<Cell> evaluated;    // Cells evaluated
 
 	
 public:
@@ -42,6 +33,7 @@ public:
 
 	// Displaying - SFML
 	void draw(sf::RenderWindow &window);
+	void drawPath(sf::RenderWindow &window, std::vector<sf::Vector2f> path);
 
 	// Getting Specific cell ( will need this later )
 	Cell& at(int x, int y);
@@ -56,9 +48,12 @@ public:
 	void initB(const sf::Vector2f &pos);
 	void moveA(const sf::Vector2f &pos);
 	void moveB(const sf::Vector2f &pos);
+	void resetA();
+	void resetB();
 
 	std::vector<Cell*> getNeighbors(const sf::Vector2f& pos);
 
-
+	sf::Vector2f &getB();
+	sf::Vector2f &getA();
 };
 

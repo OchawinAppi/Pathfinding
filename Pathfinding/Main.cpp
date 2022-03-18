@@ -1,5 +1,6 @@
 #include "Grid.h"
 #include "utils.h"
+#include "A-Star-Functions.h"
 
 
 int main()
@@ -13,8 +14,10 @@ int main()
 
 
     sf::Vector2i mousePosition;
+    bool mapChanged = false;
 
 
+    int run_count = 0;
     while (window.isOpen())
     {
         float xRatio = static_cast<float>(window.getSize().x) / WINDOW_WIDTH;
@@ -46,16 +49,41 @@ int main()
             (map.inBounds(mouseGridPos.x, MAP_WIDTH + 1, mouseGridPos.y, MAP_HEIGHT + 1))
             )
         {
-
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && map.at(mouseGridPos).c != ' ')
+            mapChanged = true;
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
             {
-                map.at(mouseGridPos).makeEmpty();
+                if (char c = map.at(mouseGridPos).c; c != ' ')
+                {
+                    if (c == 'A')
+                    {
+                        map.resetA();
+                    }
+                    else if (c == 'B')
+                    {
+                        map.resetB();
+                    }
+
+                    map.at(mouseGridPos).makeEmpty();
+                }
+                
             }
 
             if (!map.at(mouseGridPos).solid)
             {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
                 {
+                    if (char c = map.at(mouseGridPos).c; c != ' ')
+                    {
+                        if (c == 'A')
+                        {
+                            map.resetA();
+                        }
+                        else if (c == 'B')
+                        {
+                            map.resetB();
+                        }
+                    }
+
                     map.at(mouseGridPos).makeSolid();
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
@@ -69,18 +97,19 @@ int main()
             }
         }
 
-
-        std::cout << map.getNeighbors(viToVf(mouseGridPos)).size() << '\n';
-        
-
-        
         // CLEAR SCENE
         window.clear();
         
         // DRAWING
         map.draw(window);
 
+        if (map.getA().x != -1 && map.getB().x != -1)
+        {
+            map.drawPath(window, a_star(map, map.getA(), map.getB()));
+        }
+
         window.display();
+        run_count++;
     }
     map.print();
 }

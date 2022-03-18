@@ -29,6 +29,7 @@ public:
 	// Methods
 	void makeSolid();
 	void makeEmpty();
+	void makePath();
 	void updateG(int n);
 	void updateH(int n);
 	void updateF();
@@ -36,7 +37,11 @@ public:
 	void checked();
 	void draw(sf::RenderWindow& window); // <- SFML
 
+
+	// Friends, because we don't want lonely classes ;)
 	friend std::ostream& operator<<(std::ostream& os, const Cell& cell);
+	friend bool operator== (const Cell& c1, const Cell& c2);
+	friend bool operator!= (const Cell& c1, const Cell& c2);
 
 	// Points
 	void placeLetter(char _c);
