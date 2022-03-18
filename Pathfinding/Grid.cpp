@@ -90,7 +90,8 @@ void Grid::initB(sf::Vector2f pos)
 
 void Grid::moveA(sf::Vector2f pos)
 {
-	if (!at(pos).solid)
+	// Shortcircuting
+	if (!at(pos).solid && at(pos).c == ' ')
 	{
 		if (aPos.x == -1)
 		{
@@ -106,7 +107,8 @@ void Grid::moveA(sf::Vector2f pos)
 
 void Grid::moveB(sf::Vector2f pos)
 {
-	if (!at(pos).solid)
+	// Shortcircuting
+	if (!at(pos).solid && at(pos).c==' ')
 	{
 		if (bPos.x == -1)
 		{

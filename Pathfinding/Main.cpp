@@ -4,7 +4,7 @@
 
 int main()
 {
-    
+
     Grid map{ MAP_WIDTH, MAP_HEIGHT };
 
     map.print();
@@ -17,13 +17,17 @@ int main()
 
     while (window.isOpen())
     {
-
+        float xRatio = static_cast<float>(window.getSize().x) / WINDOW_WIDTH;
+        float yRatio = static_cast<float>(window.getSize().y) / WINDOW_HEIGHT;
         mousePosition = sf::Mouse::getPosition(window);
-        mousePosition.x -= window.getSize().x / 4;
-        mousePosition.y -= window.getSize().y / 4;
 
-        sf::Vector2i mouseGridPos{ (int)(mousePosition.x / DEFAULT_TILE_SIZE), (int)(mousePosition.y / DEFAULT_TILE_SIZE) };
+        mousePosition.x -= (static_cast<float>(window.getSize().x) / 2) - (MAP_HEIGHT / 2) * DEFAULT_TILE_SIZE * xRatio;
+        mousePosition.y -= (static_cast<float>(window.getSize().y) / 2) - (MAP_HEIGHT / 2) * DEFAULT_TILE_SIZE * yRatio;
 
+        sf::Vector2i mouseGridPos{ 
+            static_cast<int>(mousePosition.x / (DEFAULT_TILE_SIZE * xRatio)), 
+            static_cast<int>(mousePosition.y / (DEFAULT_TILE_SIZE * yRatio))
+        };
 
         // PROCESS EVENTS/ INPUTS
         sf::Event event;
@@ -36,37 +40,28 @@ int main()
             window.close();
         }
 
-        // Drawing map
+        // Updating and editting positions
         if (
-            sf::Mouse::isButtonPressed(sf::Mouse::Left) && 
-            (map.inBounds((int)(mousePosition.x / DEFAULT_TILE_SIZE), MAP_WIDTH + 1) && map.inBounds((int)(mousePosition.y / DEFAULT_TILE_SIZE), MAP_HEIGHT + 1)) &&
-            !map.at((int)(mousePosition.x / DEFAULT_TILE_SIZE), (int)(mousePosition.y / DEFAULT_TILE_SIZE)).solid 
-            ) 
-        {
-            map.at(mouseGridPos).makeSolid();
-        }
-
-        if (
-            sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
-            (map.inBounds((int)(mousePosition.x / DEFAULT_TILE_SIZE), MAP_WIDTH + 1) && map.inBounds((int)(mousePosition.y / DEFAULT_TILE_SIZE), MAP_HEIGHT + 1)) &&
-            !map.at((int)(mousePosition.x / DEFAULT_TILE_SIZE), (int)(mousePosition.y / DEFAULT_TILE_SIZE)).solid
+            (sf::Keyboard::isKeyPressed || sf::Mouse::isButtonPressed) &&
+            (map.inBounds(mouseGridPos.x, MAP_WIDTH + 1) && map.inBounds(mouseGridPos.y, MAP_HEIGHT + 1)) &&
+            !map.at(mouseGridPos).solid
             )
         {
-            map.moveA(viToVf(mouseGridPos));
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            {
+                map.at(mouseGridPos).makeSolid();
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            {
+                map.moveA(viToVf(mouseGridPos));
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
+            {
+                map.moveB(viToVf(mouseGridPos));
+            }
         }
 
-        if (
-            sf::Keyboard::isKeyPressed(sf::Keyboard::B) &&
-            (map.inBounds((int)(mousePosition.x / DEFAULT_TILE_SIZE), MAP_WIDTH + 1) && map.inBounds((int)(mousePosition.y / DEFAULT_TILE_SIZE), MAP_HEIGHT + 1)) &&
-            !map.at((int)(mousePosition.x / DEFAULT_TILE_SIZE), (int)(mousePosition.y / DEFAULT_TILE_SIZE)).solid
-            )
-        {
-            map.moveB(viToVf(mouseGridPos));
-        }
-
-
-
-
+        // CLEAR SCENE
         window.clear();
         
         // DRAWING
