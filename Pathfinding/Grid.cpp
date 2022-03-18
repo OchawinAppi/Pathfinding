@@ -16,6 +16,9 @@ Grid::Grid(int x, int y)
 			}
 		}
 	}
+
+	aPos = sf::Vector2f(-1, -1);
+	bPos = sf::Vector2f(-1, -1);
 }
 
 
@@ -60,9 +63,61 @@ Cell& Grid::at(int x, int y)
 	return grid.at(y).at(x);
 }
 
+Cell& Grid::at(sf::Vector2f pos)
+{
+	return at(pos.x, pos.y);
+}
+
+Cell& Grid::at(sf::Vector2i pos)
+{
+	return at(static_cast<int>(pos.x), static_cast<int>(pos.y));
+}
+
 bool Grid::inBounds(int y, int size) 
 {
 	return (y > 0 && y < size);
+}
+
+void Grid::initA(sf::Vector2f pos)
+{
+	aPos = sf::Vector2f(pos);
+}
+
+void Grid::initB(sf::Vector2f pos)
+{
+	bPos = sf::Vector2f(pos);
+}
+
+void Grid::moveA(sf::Vector2f pos)
+{
+	if (!at(pos).solid)
+	{
+		if (aPos.x == -1)
+		{
+			initA(pos);
+			return;
+		}
+		at(aPos).makeEmpty();
+		aPos.x = pos.x;
+		aPos.y = pos.y;
+		at(pos).c = 'A';
+	}
+}
+
+void Grid::moveB(sf::Vector2f pos)
+{
+	if (!at(pos).solid)
+	{
+		if (bPos.x == -1)
+		{
+			initB(pos);
+			return;
+		}
+		at(bPos).makeEmpty();
+		bPos.x = pos.x;
+		bPos.y = pos.y;
+		at(pos).c = 'B';
+	}
 }
 
 

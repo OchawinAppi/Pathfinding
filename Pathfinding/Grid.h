@@ -11,6 +11,10 @@ class Grid
 {
 private:
 	std::vector<std::vector<Cell>> grid;
+	sf::Vector2f aPos;
+	sf::Vector2f bPos;
+
+
 public:
 	// Constructor
 	Grid(int x, int y);
@@ -28,7 +32,17 @@ public:
 
 	// Getting Specific cell ( will need this later )
 	Cell& at(int x, int y);
+	Cell& at(sf::Vector2f pos);
+	Cell& at(sf::Vector2i pos);
 
 	bool inBounds(int y, int size);
+
+	// Points
+
+	void initA(sf::Vector2f pos);
+	void initB(sf::Vector2f pos);
+	void moveA(sf::Vector2f pos);
+	void moveB(sf::Vector2f pos);
+
 };
 

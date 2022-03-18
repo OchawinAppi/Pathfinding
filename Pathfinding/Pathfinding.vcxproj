@@ -162,6 +162,8 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="Directions.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

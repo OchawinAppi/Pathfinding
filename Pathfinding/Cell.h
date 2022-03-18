@@ -21,6 +21,10 @@ public:
 	// SFML
 	sf::RectangleShape tile;
 
+	// Points
+	sf::Vector2f aPos;
+	sf::Vector2f bPos;
+
 	// Constructors
 	Cell();
 	Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction = Direction::NONE);
@@ -28,6 +32,7 @@ public:
 	
 	// Methods
 	void makeSolid();
+	void makeEmpty();
 	void updateG(int n);
 	void updateH(int n);
 	void updateF();
@@ -37,5 +42,7 @@ public:
 
 	friend std::ostream& operator<<(std::ostream& os, const Cell& cell);
 
+	// Points
+	void placeLetter(char _c);
 };
 
