@@ -19,6 +19,11 @@ Grid::Grid(int x, int y)
 
 	aPos = sf::Vector2f(-1, -1);
 	bPos = sf::Vector2f(-1, -1);
+	curPos = aPos;
+
+	// For A-Star
+	free = {};
+	evaluated = {};
 }
 
 

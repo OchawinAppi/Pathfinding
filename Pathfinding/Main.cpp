@@ -21,8 +21,8 @@ int main()
         float yRatio = static_cast<float>(window.getSize().y) / WINDOW_HEIGHT;
         mousePosition = sf::Mouse::getPosition(window);
 
-        mousePosition.x -= (static_cast<float>(window.getSize().x) / 2) - (MAP_HEIGHT / 2) * DEFAULT_TILE_SIZE * xRatio;
-        mousePosition.y -= (static_cast<float>(window.getSize().y) / 2) - (MAP_HEIGHT / 2) * DEFAULT_TILE_SIZE * yRatio;
+        mousePosition.x -= static_cast<int>((static_cast<float>(window.getSize().x) / 2) - static_cast<float>((MAP_HEIGHT / 2)) * DEFAULT_TILE_SIZE * xRatio);
+        mousePosition.y -= static_cast<int>((static_cast<float>(window.getSize().y) / 2) - static_cast<float>((MAP_HEIGHT / 2)) * DEFAULT_TILE_SIZE * yRatio);
 
         sf::Vector2i mouseGridPos{ 
             static_cast<int>(mousePosition.x / (DEFAULT_TILE_SIZE * xRatio)), 
@@ -42,25 +42,33 @@ int main()
 
         // Updating and editting positions
         if (
-            (sf::Keyboard::isKeyPressed || sf::Mouse::isButtonPressed) &&
-            (map.inBounds(mouseGridPos.x, MAP_WIDTH + 1) && map.inBounds(mouseGridPos.y, MAP_HEIGHT + 1)) &&
-            !map.at(mouseGridPos).solid
+            (isAnyKeyPressed() || sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) &&
+            (map.inBounds(mouseGridPos.x, MAP_WIDTH + 1) && map.inBounds(mouseGridPos.y, MAP_HEIGHT + 1))
             )
         {
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && map.at(mouseGridPos).c != ' ')
             {
-                map.at(mouseGridPos).makeSolid();
+                map.at(mouseGridPos).makeEmpty();
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+
+            if (!map.at(mouseGridPos).solid)
             {
-                map.moveA(viToVf(mouseGridPos));
-            }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
-            {
-                map.moveB(viToVf(mouseGridPos));
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                {
+                    map.at(mouseGridPos).makeSolid();
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                {
+                    map.moveA(viToVf(mouseGridPos));
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
+                {
+                    map.moveB(viToVf(mouseGridPos));
+                }
             }
         }
-
+        
         // CLEAR SCENE
         window.clear();
         

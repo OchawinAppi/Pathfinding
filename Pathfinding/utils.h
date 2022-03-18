@@ -11,3 +11,13 @@ sf::Vector2f viToVf(sf::Vector2i vec)
 {
 	return sf::Vector2f(static_cast<float>(vec.x), static_cast<float>(vec.y));
 }
+
+bool isAnyKeyPressed()
+{
+	for (int k = -1; k < sf::Keyboard::KeyCount; ++k)
+	{
+		if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(k)))
+			return true;
+	}
+	return false;
+}

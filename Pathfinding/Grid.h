@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Cell.h"
+//#include "A-Star-Functions.h"
 
 
 
@@ -11,10 +12,22 @@ class Grid
 {
 private:
 	std::vector<std::vector<Cell>> grid;
+	
+	// Start node
 	sf::Vector2f aPos;
+
+	// End node
 	sf::Vector2f bPos;
 
+	// Current node
+	sf::Vector2f curPos;
 
+
+	// For A-Star
+	std::vector<Cell> free;			// Cells not evaluated
+	std::vector<Cell> evaluated;    // Cells evaluated
+
+	
 public:
 	// Constructor
 	Grid(int x, int y);
