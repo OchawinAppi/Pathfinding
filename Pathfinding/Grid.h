@@ -45,17 +45,20 @@ public:
 
 	// Getting Specific cell ( will need this later )
 	Cell& at(int x, int y);
-	Cell& at(sf::Vector2f pos);
-	Cell& at(sf::Vector2i pos);
+	Cell& at(const sf::Vector2f& pos);
+	Cell& at(const sf::Vector2i& pos);
 
-	bool inBounds(int y, int size);
+	bool inBounds(int x, int x_size, int y, int y_size);
 
 	// Points
 
-	void initA(sf::Vector2f pos);
-	void initB(sf::Vector2f pos);
-	void moveA(sf::Vector2f pos);
-	void moveB(sf::Vector2f pos);
+	void initA(const sf::Vector2f &pos);
+	void initB(const sf::Vector2f &pos);
+	void moveA(const sf::Vector2f &pos);
+	void moveB(const sf::Vector2f &pos);
+
+	std::vector<Cell*> getNeighbors(const sf::Vector2f& pos);
+
 
 };
 

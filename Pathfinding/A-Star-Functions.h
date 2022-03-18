@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-int aStarDist(int x2, int y2, int x1, int y1) {
+constexpr int aStarDist(int x2, int y2, int x1, int y1) {
 	int x_dist = abs(x2 - x1);
 	int y_dist = abs(y2 - y1);
 
@@ -17,4 +17,5 @@ int aStarDist(int x2, int y2, int x1, int y1) {
 	
 	return distance;
 }
+
 

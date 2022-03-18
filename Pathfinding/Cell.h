@@ -21,10 +21,6 @@ public:
 	// SFML
 	sf::RectangleShape tile;
 
-	// Points
-	sf::Vector2f aPos;
-	sf::Vector2f bPos;
-
 	// Constructors
 	Cell();
 	Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction = Direction::NONE);

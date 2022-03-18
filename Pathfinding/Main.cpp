@@ -43,7 +43,7 @@ int main()
         // Updating and editting positions
         if (
             (isAnyKeyPressed() || sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) &&
-            (map.inBounds(mouseGridPos.x, MAP_WIDTH + 1) && map.inBounds(mouseGridPos.y, MAP_HEIGHT + 1))
+            (map.inBounds(mouseGridPos.x, MAP_WIDTH + 1, mouseGridPos.y, MAP_HEIGHT + 1))
             )
         {
 
@@ -68,6 +68,11 @@ int main()
                 }
             }
         }
+
+
+        std::cout << map.getNeighbors(viToVf(mouseGridPos)).size() << '\n';
+        
+
         
         // CLEAR SCENE
         window.clear();
