@@ -26,3 +26,18 @@ inline int getPositionCode(sf::Vector2f pos)
 {
 	return (static_cast<int>(pos.x) + static_cast<int>(pos.y) * MAP_WIDTH);
 }
+
+template <typename  ... Args>
+constexpr inline void log(std::string_view title, Args&& ... args)
+{
+	std::cout << "== " << title << " ==\n";
+	log(std::forward<Args>(args));
+	std::cout << '\n';
+}
+
+template <typename ... Args>
+constexpr inline void log(Args&& ... args)
+{
+	([](const auto& x) { std::cout << ": " << x << " "; }(std::forward<Args>(args)), ...);
+	std::cout << '\n';
+}

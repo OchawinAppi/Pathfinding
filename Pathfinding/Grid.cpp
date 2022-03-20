@@ -170,7 +170,7 @@ std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos, bool diag)
 	{
 		for (int _x = x - 1; _x < x + 2;++ _x)
 		{
-			if (!(_x == x) && this->inBounds(_x, MAP_WIDTH, y, MAP_HEIGHT))
+			if (!(_x == x) && this->inBounds(_x, MAP_WIDTH+1, y, MAP_HEIGHT+1))
 			{
 				if (Cell* cell = &at(_x, y); !cell->solid)
 				{
@@ -181,7 +181,7 @@ std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos, bool diag)
 
 		for (int _y = y - 1; _y < y + 2; ++_y)
 		{
-			if (!(_y == y) && this->inBounds(x, MAP_WIDTH, _y, MAP_HEIGHT))
+			if (!(_y == y) && this->inBounds(x, MAP_WIDTH+1, _y, MAP_HEIGHT+1))
 			{
 				if (Cell* cell = &at(x, _y); !cell->solid)
 				{
@@ -200,7 +200,7 @@ std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos, bool diag)
 	{
 		for (int _y = y - 1; _y < y + 2; _y++)
 		{
-			if (!(_x == x && _y == y) && this->inBounds(_x, MAP_WIDTH, _y, MAP_HEIGHT))
+			if (!(_x == x && _y == y) && this->inBounds(_x, MAP_WIDTH+1, _y, MAP_HEIGHT+1))
 			{
 				if (Cell* cell = &at(_x, _y); !cell->solid)
 				{

@@ -18,6 +18,7 @@ int main()
 
     int run_count = 0;
     bool diag = true;
+    bool reachable = true;
 
     while (window.isOpen())
     {
@@ -45,6 +46,7 @@ int main()
                 {
                     diag = !diag;
                     pathUpdate = true;
+                    reachable = true;
                 }
             }
         }
@@ -72,6 +74,7 @@ int main()
                     }
 
                     map.at(mouseGridPos).makeEmpty();
+                    reachable = true;
                     pathUpdate = true;
                 }
                 
@@ -117,9 +120,10 @@ int main()
         // DRAWING
         map.draw(window);
 
-        if (map.getA().x != -1 && map.getB().x != -1 && pathUpdate)
+        if (map.getA().x != -1 && map.getB().x != -1 && pathUpdate && reachable)
         {
             path = a_star(map, map.getA(), map.getB(), diag);
+            reachable = !(path.empty());
             pathUpdate = false;
         }
 

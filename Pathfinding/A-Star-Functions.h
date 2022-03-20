@@ -36,8 +36,8 @@ inline auto contains(const std::vector<T>& vec, const T &_item)
 
 // Note, for simplicity, we covert 1.0 and 1.4 to 10 and 14. We hate decimals.
 inline int heuristic(sf::Vector2f &node, sf::Vector2f &target) {
-	int x_dist = abs(node.x - target.x);
-	int y_dist = abs(node.y - target.y);
+	int x_dist = static_cast<int>(abs(node.x - target.x));
+	int y_dist = static_cast<int>(abs(node.y - target.y));
 
 	int distance = 0;
 	while (x_dist >= 1 && y_dist >= 1) {
@@ -50,10 +50,8 @@ inline int heuristic(sf::Vector2f &node, sf::Vector2f &target) {
 	return distance;
 }
 
-
 std::vector<Cell*> a_star(Grid& map, sf::Vector2f &start_node, sf::Vector2f &target_node, bool diag)
 {
-	
 	map.at(start_node).updateG(0);
 	map.at(start_node).updateH(heuristic(start_node, target_node));
 	map.at(start_node).updateF();
@@ -95,6 +93,13 @@ std::vector<Cell*> a_star(Grid& map, sf::Vector2f &start_node, sf::Vector2f &tar
 			}
 		}
 
+	
+		if ((current_node->pos.x == target_node.x) && (current_node->pos.y == target_node.y))
+		{
+			break;
+		}
+		
+
 		// Erase the node from the pool.
 		open_nodes.erase(open_nodes.begin() + current_node_index);
 
@@ -130,8 +135,10 @@ std::vector<Cell*> a_star(Grid& map, sf::Vector2f &start_node, sf::Vector2f &tar
 				travelMap[neighbor] = current_node;
 			
 			}
+			//log(neighbor->pos.x, neighbor->pos.y, neighbor->F_dist, neighbor->G_dist);
 		}
 	}
+	
 
 	// BACKTRACK
 	Cell* next = &map.at(target_node);
