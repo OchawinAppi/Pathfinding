@@ -6,21 +6,13 @@ class Grid
 {
 private:
 	std::vector<std::vector<Cell>> grid;
-	
-	// Start node
 	sf::Vector2f aPos;
-
-	// End node
 	sf::Vector2f bPos;
-
-	
 public:
 	// Constructor
 	Grid(int x, int y);
 
 	// Destructor not needed. The compiler got this. ;) ( probably )
-
-	// Methods 
 
 	// Displaying - Console
 	void print();
@@ -40,7 +32,6 @@ public:
 	bool inBounds(int x, int x_size, int y, int y_size);
 
 	// Points 
-
 	void initA(const sf::Vector2f &pos);
 	void initB(const sf::Vector2f &pos);
 	bool moveA(const sf::Vector2f &pos);
@@ -48,9 +39,9 @@ public:
 	bool canRoute();
 	void resetA();
 	void resetB();
+	void resetGrid();
 
 	std::vector<Cell*> getNeighbors(const sf::Vector2f& pos, bool diag);
-
 	sf::Vector2f &getB();
 	sf::Vector2f &getA();
 

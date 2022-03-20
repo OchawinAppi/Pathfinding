@@ -51,6 +51,11 @@ int main()
                     pathUpdate = true;
                     pathBlocked = false;
                 }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+                {
+                    map.resetGrid();
+                    enclosedCellRoom.clear();
+                }
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {

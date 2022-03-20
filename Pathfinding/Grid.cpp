@@ -161,6 +161,25 @@ void Grid::resetB()
 	bPos.y = -1;
 }
 
+void Grid::resetGrid()
+{
+	resetA();
+	resetB();
+	for (int y = 1; y < MAP_HEIGHT+1; ++y)
+	{
+		for (int x = 1; x < MAP_WIDTH+1; ++x)
+		{
+			this->at(y, x).F_dist = 0;
+			this->at(y, x).G_dist = 0;
+			this->at(y, x).H_dist = 0;
+			this->at(y, x).solid = false;
+			this->at(y, x).c = ' ';
+		}
+	}
+
+	
+}
+
 
 std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos, bool diag)
 {
