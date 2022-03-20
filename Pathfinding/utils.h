@@ -21,3 +21,8 @@ bool isAnyKeyPressed()
 	}
 	return false;
 }
+
+inline int getPositionCode(sf::Vector2f pos)
+{
+	return (static_cast<int>(pos.x) + static_cast<int>(pos.y) * MAP_WIDTH);
+}

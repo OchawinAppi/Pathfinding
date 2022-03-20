@@ -2,9 +2,23 @@
 
 #include <math.h>
 #include "Grid.h"
+#include <unordered_map>
+
+inline bool contatinsPtr(const std::vector<Cell*>& vec, Cell*& item)
+{
+	for (int i = 0; i < static_cast<int>(vec.size()); i++)
+	{
+		//std::cout << vec.at(i)->pos.x << " - " << item->pos.x << " && " << vec.at(i)->pos.y << " - " << item->pos.y << '\n';
+		if (vec.at(i)==item)
+		{
+			return true;
+		}
+	}
+	return false;
+}
 
 template <typename T>
-auto contains(std::vector<T>& vec, const T &_item)
+inline auto contains(const std::vector<T>& vec, const T &_item)
 {
 	struct returnInfo
 	{
@@ -21,9 +35,9 @@ auto contains(std::vector<T>& vec, const T &_item)
 
 
 // Note, for simplicity, we covert 1.0 and 1.4 to 10 and 14. We hate decimals.
-int heuristic(sf::Vector2f node, sf::Vector2f target) {
-	int x_dist = static_cast<int>(abs(node.x - target.x));
-	int y_dist = static_cast<int>(abs(node.y - target.y));
+inline int heuristic(sf::Vector2f &node, sf::Vector2f &target) {
+	int x_dist = abs(node.x - target.x);
+	int y_dist = abs(node.y - target.y);
 
 	int distance = 0;
 	while (x_dist >= 1 && y_dist >= 1) {
@@ -33,59 +47,104 @@ int heuristic(sf::Vector2f node, sf::Vector2f target) {
 	}
 	distance += x_dist * 10;
 	distance += y_dist * 10;
-	
 	return distance;
 }
 
 
-std::vector<sf::Vector2f> a_star(Grid& map, sf::Vector2f start, sf::Vector2f target)
+std::vector<Cell*> a_star(Grid& map, sf::Vector2f &start_node, sf::Vector2f &target_node, bool diag)
 {
-	sf::Vector2f curPos{start};			// current node
+	
+	map.at(start_node).updateG(0);
+	map.at(start_node).updateH(heuristic(start_node, target_node));
+	map.at(start_node).updateF();
 
-	std::vector<Cell> toEval{};			// Cells not evaluated
-	std::vector<Cell> evaluated{};    // Cells evaluated
-	std::vector<Cell> free{};
+	std::vector<Cell*> open_nodes{ &map.at(start_node) };
+	std::vector<Cell*> closed_nodes{};
 
-	std::vector<sf::Vector2f> travelPath{};
+	std::unordered_map<Cell*, Cell*> travelMap;
+	std::vector<Cell*> travelPath{};
 
-	int count = 0; // Safety precaution
-	while (count < 10 && curPos != target)
+
+	Cell* current_node = nullptr;
+
+	bool quit = false;
+
+	while (open_nodes.size() > 0 && !quit)
 	{
-		for (const auto& neighbor : map.getNeighbors(curPos))
-		{
-			neighbor->updateH(heuristic(neighbor->pos, target));
-			neighbor->updateG(map.at(curPos).G_dist + heuristic(neighbor->pos, start));
-			neighbor->updateF();
-			toEval.push_back(*neighbor);
-		}
+		current_node = open_nodes.at(0);
+		int current_node_index = 0;
 
-		for (const auto& cell : toEval)
+		// Step 1: Get Lowest node, it'll be our current node.
+		for (size_t i = 1; i < open_nodes.size(); ++i)
 		{
-			if (auto [hasCell, index] = contains(free, cell); hasCell)
+			auto* temp_node = open_nodes.at(i);
+
+			// Check for greater f_cost, if there are nodes with same f_cost, check h_cost.
+			if (temp_node->F_dist < current_node->F_dist)
 			{
-				if (cell.F_dist < free.at(index).F_dist)
-				free.at(index).H_dist = cell.H_dist;
-				free.at(index).G_dist = cell.G_dist;
+				current_node = temp_node;
+				current_node_index = i;
 			}
-			else
+			else if (temp_node->F_dist == current_node->F_dist)
 			{
-				free.push_back(cell);
-			}
-		}
-
-
-		if (!free.empty())
-		{
-			std::sort(free.begin(), free.end(), [](Cell& val1, Cell& val2)
-				{ 
-					return (val1.F_dist != val2.F_dist) ? (val1.F_dist < val2.F_dist) : (val1.G_dist < val2.G_dist);
+				if (temp_node->H_dist < current_node->H_dist)
+				{
+					current_node = temp_node;
+					current_node_index = i;
 				}
-			);
-
-			Cell lowest = free.at(0);
-			travelPath.push_back(lowest.pos);
+			}
 		}
-		count++;
+
+		// Erase the node from the pool.
+		open_nodes.erase(open_nodes.begin() + current_node_index);
+
+		// Add it to the list of nodes we have evaluated.
+		closed_nodes.push_back(current_node);
+
+		// Step 2: Evaluate the neighbors of the current node.
+		for (auto* neighbor : map.getNeighbors(current_node->pos, diag))
+		{
+			// If the target node is a neighbor, it's done.  
+			quit = (*neighbor == map.at(target_node));
+
+			// Skip neighbors which have been evaluated.
+			if (contatinsPtr(closed_nodes, neighbor)) continue;
+		
+			// new_travel_cost = cost_so_far + cost_from_current_to_neighbor
+			const int new_g_cost = current_node->G_dist + heuristic(current_node->pos, neighbor->pos);
+			
+			// Check if neighbor exists within the pool (not evaluated)
+			bool inOpen = contatinsPtr(open_nodes, neighbor);
+
+			// If node DNE in pool, add
+			// If node exists and g_cost is cheaper, update.
+			if (new_g_cost < neighbor->G_dist || !inOpen)
+			{
+				neighbor->updateG(new_g_cost);
+				neighbor->updateH(heuristic(neighbor->pos, target_node));
+				neighbor->updateF();
+
+				if (!inOpen) open_nodes.push_back(neighbor);
+
+				// nodeTravledTo = nodeTraveledFrom, we will have a chain of these in the end.
+				travelMap[neighbor] = current_node;
+			
+			}
+		}
+	}
+
+	// BACKTRACK
+	Cell* next = &map.at(target_node);
+	
+	// Just checking while the next parent node exists.
+	while (travelMap.count(next))
+	{
+		next = travelMap[next];
+		next->isPath = true;
+		if (*next != map.at(start_node))
+		{
+			travelPath.push_back(next);
+		}
 	}
 	return travelPath;
 }

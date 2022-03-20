@@ -2,9 +2,9 @@
 
 Cell::Cell() 
 {
-	G_dist = 0;
-	H_dist = 0;
-	F_dist = 0;
+	G_dist = -1;
+	H_dist = -1;
+	F_dist = -1;
 
 	pos = sf::Vector2f(-1, -1);
 	dir = Direction::NONE;
@@ -15,7 +15,6 @@ Cell::Cell()
 
 	// SFML
 	tile = sf::RectangleShape{};
-
 }
 
 Cell::Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction) :
@@ -38,9 +37,6 @@ Cell::Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction) :
 		(pos.x * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_WIDTH / 2) * DEFAULT_TILE_SIZE,
 		(pos.y * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_HEIGHT / 2) * DEFAULT_TILE_SIZE
 	);
-
-	//available = false;
-	
 }
 
 void Cell::makeSolid() 
@@ -62,17 +58,17 @@ void Cell::makePath()
 
 void Cell::updateG(int n) 
 {
-	G_dist = n;
+	this->G_dist = n;
 }
 
 void Cell::updateH(int n) 
 {
-	H_dist = n;
+	this->H_dist = n;
 }
 
 void Cell::updateF() 
 {
-	F_dist = H_dist + G_dist;
+	this->F_dist = this->H_dist + this->G_dist;
 }
 
 bool& Cell::getChecked()
@@ -105,6 +101,16 @@ void Cell::draw(sf::RenderWindow &window)
 	window.draw(tile);
 }
 
+bool Cell::operator==(const Cell& other) const
+{
+	return this->pos.x == other.pos.x && this->pos.y == other.pos.y;
+}
+
+bool Cell::operator!=(const Cell& other) const
+{
+	return this->pos.x != other.pos.x || this->pos.y != other.pos.y;;
+}
+
 void Cell::placeLetter(char _c)
 {
 	this->c = _c;
@@ -115,12 +121,3 @@ std::ostream& operator<<(std::ostream& os, const Cell& cell)
 	return os << cell.c;
 }
 
-bool operator==(const Cell& c1, const Cell& c2)
-{
-	return (c1.pos.x == c2.pos.x && c1.pos.y == c2.pos.y);
-}
-
-bool operator!=(const Cell& c1, const Cell& c2)
-{
-	return c1 == c2;
-}

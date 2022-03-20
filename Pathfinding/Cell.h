@@ -11,6 +11,8 @@ public:
 	int H_dist;
 	int F_dist;
 
+	bool isPath = false;
+
 	sf::Vector2f pos;
 	Direction dir; // <- direction leading to parent cell ( for forming path later )
 
@@ -40,8 +42,8 @@ public:
 
 	// Friends, because we don't want lonely classes ;)
 	friend std::ostream& operator<<(std::ostream& os, const Cell& cell);
-	friend bool operator== (const Cell& c1, const Cell& c2);
-	friend bool operator!= (const Cell& c1, const Cell& c2);
+	bool operator== (const Cell& other) const;
+	bool operator!= (const Cell& other) const;
 
 	// Points
 	void placeLetter(char _c);

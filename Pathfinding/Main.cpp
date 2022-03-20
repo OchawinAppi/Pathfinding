@@ -12,12 +12,13 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Path Finding");
 
-
     sf::Vector2i mousePosition;
-    bool mapChanged = false;
-
+    bool pathUpdate = true;
+    std::vector<Cell*> path{};
 
     int run_count = 0;
+    bool diag = true;
+
     while (window.isOpen())
     {
         float xRatio = static_cast<float>(window.getSize().x) / WINDOW_WIDTH;
@@ -38,6 +39,14 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+                {
+                    diag = !diag;
+                    pathUpdate = true;
+                }
+            }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             window.close();
@@ -49,7 +58,6 @@ int main()
             (map.inBounds(mouseGridPos.x, MAP_WIDTH + 1, mouseGridPos.y, MAP_HEIGHT + 1))
             )
         {
-            mapChanged = true;
             if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
             {
                 if (char c = map.at(mouseGridPos).c; c != ' ')
@@ -64,6 +72,7 @@ int main()
                     }
 
                     map.at(mouseGridPos).makeEmpty();
+                    pathUpdate = true;
                 }
                 
             }
@@ -83,16 +92,21 @@ int main()
                             map.resetB();
                         }
                     }
-
                     map.at(mouseGridPos).makeSolid();
+
+                    if (map.at(mouseGridPos).isPath)
+                    {
+                        pathUpdate = true;
+                    }
                 }
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
                 {
-                    map.moveA(viToVf(mouseGridPos));
+                    pathUpdate = map.moveA(viToVf(mouseGridPos));
+                    
                 }
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
                 {
-                    map.moveB(viToVf(mouseGridPos));
+                    pathUpdate = map.moveB(viToVf(mouseGridPos));
                 }
             }
         }
@@ -103,11 +117,15 @@ int main()
         // DRAWING
         map.draw(window);
 
-        if (map.getA().x != -1 && map.getB().x != -1)
+        if (map.getA().x != -1 && map.getB().x != -1 && pathUpdate)
         {
-            map.drawPath(window, a_star(map, map.getA(), map.getB()));
+            path = a_star(map, map.getA(), map.getB(), diag);
+            pathUpdate = false;
         }
 
+
+        map.drawPath(window, path);
+        
         window.display();
         run_count++;
     }

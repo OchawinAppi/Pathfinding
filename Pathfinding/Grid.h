@@ -33,10 +33,10 @@ public:
 
 	// Displaying - SFML
 	void draw(sf::RenderWindow &window);
-	void drawPath(sf::RenderWindow &window, std::vector<sf::Vector2f> path);
+	void drawPath(sf::RenderWindow &window, std::vector<Cell*> path);
 
 	// Getting Specific cell ( will need this later )
-	Cell& at(int x, int y);
+	inline Cell& at(int x, int y);
 	Cell& at(const sf::Vector2f& pos);
 	Cell& at(const sf::Vector2i& pos);
 
@@ -46,12 +46,12 @@ public:
 
 	void initA(const sf::Vector2f &pos);
 	void initB(const sf::Vector2f &pos);
-	void moveA(const sf::Vector2f &pos);
-	void moveB(const sf::Vector2f &pos);
+	bool moveA(const sf::Vector2f &pos);
+	bool moveB(const sf::Vector2f &pos);
 	void resetA();
 	void resetB();
 
-	std::vector<Cell*> getNeighbors(const sf::Vector2f& pos);
+	std::vector<Cell*> getNeighbors(const sf::Vector2f& pos, bool diag);
 
 	sf::Vector2f &getB();
 	sf::Vector2f &getA();

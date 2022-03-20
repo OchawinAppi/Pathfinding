@@ -56,17 +56,18 @@ void Grid::draw(sf::RenderWindow& window)
 	}
 }
 
-void Grid::drawPath(sf::RenderWindow& window, std::vector<sf::Vector2f> path)
+void Grid::drawPath(sf::RenderWindow& window, std::vector<Cell*> path)
 {
 	sf::RectangleShape node{};
-	node.setFillColor(sf::Color::Yellow);
+	
 	node.setSize(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE));
 
 	for (const auto& tile : path)
 	{
+		node.setFillColor(sf::Color(0, 150, 150 ,255));
 		sf::Vector2f correctedPosition(
-			(tile.x * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_WIDTH / 2) * DEFAULT_TILE_SIZE,
-			(tile.y * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_HEIGHT / 2) * DEFAULT_TILE_SIZE
+			(tile->pos.x * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_WIDTH / 2) * DEFAULT_TILE_SIZE,
+			(tile->pos.y * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_HEIGHT / 2) * DEFAULT_TILE_SIZE
 		);
 		node.setPosition(correctedPosition);
 		window.draw(node);
@@ -74,7 +75,7 @@ void Grid::drawPath(sf::RenderWindow& window, std::vector<sf::Vector2f> path)
 }
 
 // Getting Specific cell ( will need this later )
-Cell& Grid::at(int x, int y)
+inline Cell& Grid::at(int x, int y)
 {
 	return grid.at(y).at(x);
 }
@@ -97,14 +98,16 @@ bool Grid::inBounds(int x, int x_size, int y, int y_size)
 void Grid::initA(const sf::Vector2f &pos)
 {
 	aPos = sf::Vector2f(pos);
+	at(pos).c = 'A';
 }
 
 void Grid::initB(const sf::Vector2f& pos)
 {
 	bPos = sf::Vector2f(pos);
+	at(pos).c = 'B';
 }
 
-void Grid::moveA(const sf::Vector2f &pos)
+bool Grid::moveA(const sf::Vector2f &pos)
 {
 	// Shortcircuting
 	if (!at(pos).solid && at(pos).c == ' ')
@@ -112,16 +115,18 @@ void Grid::moveA(const sf::Vector2f &pos)
 		if (aPos.x == -1)
 		{
 			initA(pos);
-			return;
+			return true;
 		}
 		at(aPos).makeEmpty();
 		aPos.x = pos.x;
 		aPos.y = pos.y;
 		at(pos).c = 'A';
+		return true;
 	}
+	return false;
 }
 
-void Grid::moveB(const sf::Vector2f &pos)
+bool Grid::moveB(const sf::Vector2f &pos)
 {
 	// Shortcircuting
 	if (!at(pos).solid && at(pos).c==' ')
@@ -129,13 +134,15 @@ void Grid::moveB(const sf::Vector2f &pos)
 		if (bPos.x == -1)
 		{
 			initB(pos);
-			return;
+			return true;
 		}
 		at(bPos).makeEmpty();
 		bPos.x = pos.x;
 		bPos.y = pos.y;
 		at(pos).c = 'B';
+		return true;
 	}
+	return false;
 }
 
 void Grid::resetA()
@@ -151,12 +158,43 @@ void Grid::resetB()
 }
 
 
-std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos)
+std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos, bool diag)
 {
 	int x{ static_cast<int>(pos.x) };
 	int y{ static_cast<int>(pos.y) };
 
 	std::vector<Cell*> neighbors{};
+
+
+	if (diag)
+	{
+		for (int _x = x - 1; _x < x + 2;++ _x)
+		{
+			if (!(_x == x) && this->inBounds(_x, MAP_WIDTH, y, MAP_HEIGHT))
+			{
+				if (Cell* cell = &at(_x, y); !cell->solid)
+				{
+					neighbors.push_back(cell);
+				}
+			}
+		}
+
+		for (int _y = y - 1; _y < y + 2; ++_y)
+		{
+			if (!(_y == y) && this->inBounds(x, MAP_WIDTH, _y, MAP_HEIGHT))
+			{
+				if (Cell* cell = &at(x, _y); !cell->solid)
+				{
+					neighbors.push_back(cell);
+				}
+			}
+		}
+		return neighbors;
+	}
+
+
+
+
 
 	for (int _x = x - 1; _x < x + 2; _x++)
 	{
@@ -166,8 +204,10 @@ std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos)
 			{
 				if (Cell* cell = &at(_x, _y); !cell->solid)
 				{
+
 					neighbors.push_back(cell);
 				}
+		
 			}
 		}
 	}
