@@ -8,7 +8,6 @@ inline bool contatinsPtr(const std::vector<Cell*>& vec, Cell*& item)
 {
 	for (int i = 0; i < static_cast<int>(vec.size()); i++)
 	{
-		//std::cout << vec.at(i)->pos.x << " - " << item->pos.x << " && " << vec.at(i)->pos.y << " - " << item->pos.y << '\n';
 		if (vec.at(i)==item)
 		{
 			return true;
@@ -31,6 +30,98 @@ inline auto contains(const std::vector<T>& vec, const T &_item)
 		if (vec.at(i) == _item) return returnInfo { true, i };
 	}
 	return returnInfo{ false , -1 };
+}
+
+auto indiscriminateSearch(Grid& map, sf::Vector2f& start_node1, char target_letter1, sf::Vector2f& start_node2, char target_letter2, bool diag)
+{
+	struct returnInfo
+	{
+		Cell* node;
+		char target;
+		std::vector<Cell*> room;
+	};
+
+	std::vector<Cell*> collectedNodes1{ &map.at(start_node1) };
+	std::vector<Cell*> collectedNodes2{ &map.at(start_node2) };
+
+	Cell* current_node1 = nullptr;
+	Cell* current_node2 = nullptr;
+
+	int count = 0;
+	while (collectedNodes1.size() > count && collectedNodes2.size()>count)
+	{
+		current_node1 = collectedNodes1.at(count);
+		current_node2 = collectedNodes2.at(count);
+
+		if (current_node1->c == target_letter1) return returnInfo{ &map.at(start_node1), target_letter1, collectedNodes1 };
+		if (current_node2->c == target_letter2) return returnInfo{ &map.at(start_node2), target_letter2, collectedNodes2 };
+
+
+		// First one
+		const auto& neighbors1 = map.getNeighbors(current_node1->pos, diag);
+		if (neighbors1.size() == 0) returnInfo{ &map.at(start_node1), target_letter1, collectedNodes1 };
+		
+		// Second one
+		const auto& neighbors2 = map.getNeighbors(current_node2->pos, diag);
+		if (neighbors2.size() == 0) returnInfo{ &map.at(start_node2), target_letter2, collectedNodes2 };
+
+		for (auto* neighbor : neighbors1)
+		{
+			if (contatinsPtr(collectedNodes1, neighbor)) continue;
+			collectedNodes1.push_back(neighbor);
+		}
+
+		for (auto* neighbor : neighbors2)
+		{
+			if (contatinsPtr(collectedNodes2, neighbor)) continue;
+			collectedNodes2.push_back(neighbor);
+		}
+		++count;
+	}
+
+	if (collectedNodes1.size() <= count)
+		return returnInfo{ &map.at(start_node1), target_letter1, collectedNodes1 };
+	else
+		return returnInfo{ &map.at(start_node2), target_letter2, collectedNodes2 };
+
+}
+
+auto indiscriminateSearch(Grid& map, sf::Vector2f& start_node, char target_letter, bool diag)
+{
+	log("SEARCHING", target_letter);
+	struct returnInfo
+	{
+		bool blocked;
+		int size;
+	};
+
+	std::vector<Cell*> collectedNodesFromStart{ &map.at(start_node) };
+
+	Cell* current_node = nullptr;
+	int count = 0;
+	while (collectedNodesFromStart.size() > count)
+	{
+		current_node = collectedNodesFromStart.at(count);
+		log(current_node->c, target_letter);
+		if (current_node->c == target_letter) return returnInfo{ false, count };
+
+		const auto& neighbors = map.getNeighbors(current_node->pos, diag);
+
+		if (neighbors.size() == 0)
+		{
+			returnInfo{ true, count };
+		}
+
+		for (auto* neighbor : neighbors)
+		{
+			if (contatinsPtr(collectedNodesFromStart, neighbor)) continue;
+			collectedNodesFromStart.push_back(neighbor);
+		}
+		++count;
+	}
+	log("DONE");
+	return returnInfo{ true, count };
+	
 }
 
 

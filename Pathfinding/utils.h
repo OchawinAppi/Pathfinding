@@ -28,10 +28,10 @@ inline int getPositionCode(sf::Vector2f pos)
 }
 
 template <typename  ... Args>
-constexpr inline void log(std::string_view title, Args&& ... args)
+constexpr inline void logT(std::string_view title, Args&& ... args)
 {
 	std::cout << "== " << title << " ==\n";
-	log(std::forward<Args>(args));
+	([](const auto& x) { std::cout << ": " << x << " "; }(std::forward<Args>(args)), ...);
 	std::cout << '\n';
 }
 

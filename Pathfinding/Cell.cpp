@@ -83,6 +83,7 @@ void Cell::checked()
 
 void Cell::draw(sf::RenderWindow &window)
 {
+
 	if (solid)
 	{
 		tile.setFillColor(sf::Color::White);
@@ -99,6 +100,12 @@ void Cell::draw(sf::RenderWindow &window)
 	}
 
 	window.draw(tile);
+
+}
+
+void Cell::setColor(sf::Color color)
+{
+	this->tile.setFillColor(color);
 }
 
 bool Cell::operator==(const Cell& other) const

@@ -56,7 +56,7 @@ void Grid::draw(sf::RenderWindow& window)
 	}
 }
 
-void Grid::drawPath(sf::RenderWindow& window, std::vector<Cell*> path)
+void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, sf::Color color)
 {
 	sf::RectangleShape node{};
 	
@@ -64,7 +64,7 @@ void Grid::drawPath(sf::RenderWindow& window, std::vector<Cell*> path)
 
 	for (const auto& tile : path)
 	{
-		node.setFillColor(sf::Color(0, 150, 150 ,255));
+		node.setFillColor(color);
 		sf::Vector2f correctedPosition(
 			(tile->pos.x * DEFAULT_TILE_SIZE) + ((float)WINDOW_WIDTH / 2) - (MAP_WIDTH/2.*DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
 			(tile->pos.y * DEFAULT_TILE_SIZE) + ((float)WINDOW_HEIGHT / 2) - (MAP_WIDTH/2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
@@ -73,6 +73,12 @@ void Grid::drawPath(sf::RenderWindow& window, std::vector<Cell*> path)
 		window.draw(node);
 	}
 }
+
+void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, int r, int g, int b, int a)
+{
+	draw(window, path, sf::Color(r, g, b, a));
+}
+
 
 // Getting Specific cell ( will need this later )
 inline Cell& Grid::at(int x, int y)
@@ -143,6 +149,11 @@ bool Grid::moveB(const sf::Vector2f &pos)
 		return true;
 	}
 	return false;
+}
+
+bool Grid::canRoute()
+{
+	return this->getA().x != -1 && this->getB().x != -1;
 }
 
 void Grid::resetA()

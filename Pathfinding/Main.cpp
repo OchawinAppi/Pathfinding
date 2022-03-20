@@ -13,12 +13,16 @@ int main()
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Path Finding");
 
     sf::Vector2i mousePosition;
-    bool pathUpdate = true;
     std::vector<Cell*> path{};
 
     int run_count = 0;
     bool diag = true;
-    bool reachable = true;
+
+    bool pathUpdate = true;
+    bool pathBlocked = false; // Cannot route
+    sf::Vector2f* enclosedCell{};
+    std::vector<Cell*> enclosedCellRoom{};
+    char target{};
 
     while (window.isOpen())
     {
@@ -46,7 +50,7 @@ int main()
                 {
                     diag = !diag;
                     pathUpdate = true;
-                    reachable = true;
+                    pathBlocked = false;
                 }
             }
         }
@@ -74,7 +78,7 @@ int main()
                     }
 
                     map.at(mouseGridPos).makeEmpty();
-                    reachable = true;
+                    pathBlocked = false;
                     pathUpdate = true;
                 }
                 
@@ -93,6 +97,7 @@ int main()
                         else if (c == 'B')
                         {
                             map.resetB();
+                          
                         }
                     }
                     map.at(mouseGridPos).makeSolid();
@@ -103,35 +108,65 @@ int main()
                     }
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-                {
-                    pathUpdate = map.moveA(viToVf(mouseGridPos));
-                    
+                {   
+                    pathUpdate = map.moveA(viToVf(mouseGridPos));            
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
                 {
                     pathUpdate = map.moveB(viToVf(mouseGridPos));
                 }
+                if (pathBlocked && map.canRoute())
+                {
+                    Cell* A = &map.at(map.getA());
+                    Cell* B = &map.at(map.getB());
+                    bool containsA = contatinsPtr(enclosedCellRoom, A);
+                    bool containsB = contatinsPtr(enclosedCellRoom, B);
+                    pathBlocked = !(containsA == containsB);
+                }
             }
         }
+
+        // UPDATE SCENE
+        if (map.canRoute() && pathUpdate && !pathBlocked)
+        {
+            enclosedCellRoom = {};
+            path = a_star(map, map.getA(), map.getB(), diag);
+
+            // If no path can be made, it is blocked.
+            pathBlocked = (path.empty());
+
+            // Get info about what's in the smallest room (whats being blocked)
+            if (pathBlocked)
+            {
+
+                auto [_enclosedCell, _target, _enclosedCellRoom] = indiscriminateSearch(map, map.getA(), 'B', map.getB(), 'A', diag);
+                enclosedCell = nullptr;
+                enclosedCell = &_enclosedCell->pos;
+                target = _target;
+                for (auto var : _enclosedCellRoom)
+                {
+                    enclosedCellRoom.push_back(var);
+                }
+
+                //log("PATH BLOCKED", enclosedCell->x, enclosedCell->y, target, enclosedCellRoom.size());
+            }
+
+            pathUpdate = false;
+        }
+
+        if (!map.canRoute() || pathBlocked) path = {};
 
         // CLEAR SCENE
         window.clear();
         
         // DRAWING
         map.draw(window);
-
-        if (map.getA().x != -1 && map.getB().x != -1 && pathUpdate && reachable)
-        {
-            path = a_star(map, map.getA(), map.getB(), diag);
-            reachable = !(path.empty());
-            pathUpdate = false;
-        }
-
-
-        map.drawPath(window, path);
+        map.draw(window, enclosedCellRoom, 200, 200, 200, 100);
+        map.draw(window, path, sf::Color::Cyan);
         
         window.display();
         run_count++;
+
     }
     map.print();
 }

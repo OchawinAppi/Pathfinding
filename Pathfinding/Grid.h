@@ -33,7 +33,9 @@ public:
 
 	// Displaying - SFML
 	void draw(sf::RenderWindow &window);
-	void drawPath(sf::RenderWindow &window, std::vector<Cell*> path);
+	void draw(sf::RenderWindow &window, std::vector<Cell*> path, sf::Color color);
+	void draw(sf::RenderWindow &window, std::vector<Cell*> path, int r, int g, int b, int a);
+	void drawNodes(sf::RenderWindow &window);
 
 	// Getting Specific cell ( will need this later )
 	inline Cell& at(int x, int y);
@@ -48,6 +50,7 @@ public:
 	void initB(const sf::Vector2f &pos);
 	bool moveA(const sf::Vector2f &pos);
 	bool moveB(const sf::Vector2f &pos);
+	bool canRoute();
 	void resetA();
 	void resetB();
 
@@ -55,5 +58,14 @@ public:
 
 	sf::Vector2f &getB();
 	sf::Vector2f &getA();
+
+	inline sf::Vector2f offsetPosition(const sf::Vector2f& position) const
+	{
+		return sf::Vector2f(
+			(position.x * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
+			(position.y * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
+		);
+	
+	}
 };
 

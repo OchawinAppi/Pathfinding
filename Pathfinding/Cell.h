@@ -39,6 +39,7 @@ public:
 	void checked();
 	void draw(sf::RenderWindow& window); // <- SFML
 
+	void setColor(sf::Color color);
 
 	// Friends, because we don't want lonely classes ;)
 	friend std::ostream& operator<<(std::ostream& os, const Cell& cell);
