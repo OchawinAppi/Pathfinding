@@ -1,7 +1,6 @@
 #pragma once
-#include "Directions.h"
-#include <SFML/Graphics.hpp>
 #include "Config.h"
+#include <SFML/Graphics.hpp>
 
 
 class Cell {
@@ -14,7 +13,6 @@ public:
 	bool isPath = false;
 
 	sf::Vector2f pos;
-	Direction dir; // <- direction leading to parent cell ( for forming path later )
 
 	bool solid; // <- Won't evaluate solid cells ( walls )
 	char c; // <- for printing on console ( pre-sfml ) AND conditional checking!
@@ -25,7 +23,7 @@ public:
 
 	// Constructors
 	Cell();
-	Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction = Direction::NONE);
+	Cell(int g, int h, bool _solid, int _x, int _y);
 	// Destructor not needed. The compiler got this. ;) ( probably )
 	
 	// Methods

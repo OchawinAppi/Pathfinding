@@ -7,7 +7,6 @@ Cell::Cell()
 	F_dist = -1;
 
 	pos = sf::Vector2f(-1, -1);
-	dir = Direction::NONE;
 
 	c = ' ';
 	solid = false;
@@ -17,7 +16,7 @@ Cell::Cell()
 	tile = sf::RectangleShape{};
 }
 
-Cell::Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction) :
+Cell::Cell(int g, int h, bool _solid, int _x, int _y) :
 	G_dist(g), H_dist(h), solid(_solid)
 {
 	F_dist = G_dist + H_dist;
@@ -28,16 +27,16 @@ Cell::Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction) :
 		static_cast<float>(_x), 
 		static_cast<float>(_y)
 	);
-	dir = _direction;
 
 	tile = sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE));
 
 	// Note: Multiply by 
-	tile.setPosition(
+	tile.setPosition( 
 		(pos.x * DEFAULT_TILE_SIZE) + ((float)WINDOW_WIDTH / 2) - (MAP_WIDTH/2.*DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
 		(pos.y * DEFAULT_TILE_SIZE) + ((float)WINDOW_HEIGHT / 2) - (MAP_HEIGHT / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
 	);
 }
+
 
 void Cell::makeSolid() 
 {

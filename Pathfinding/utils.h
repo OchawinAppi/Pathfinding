@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 sf::Vector2i vfToVi(sf::Vector2f vec)
 {
@@ -40,4 +41,11 @@ constexpr inline void log(Args&& ... args)
 {
 	([](const auto& x) { std::cout << ": " << x << " "; }(std::forward<Args>(args)), ...);
 	std::cout << '\n';
+}
+
+sf::Vector2f offset(sf::Vector2f& pos)
+{
+	return sf::Vector2f(
+		(pos.x * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
+		(pos.y * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_HEIGHT / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE);
 }

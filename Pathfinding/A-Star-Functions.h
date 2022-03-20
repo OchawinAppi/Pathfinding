@@ -3,6 +3,7 @@
 #include <math.h>
 #include "Grid.h"
 #include <unordered_map>
+#include "utils.h"
 
 inline bool contatinsPtr(const std::vector<Cell*>& vec, Cell*& item)
 {

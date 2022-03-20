@@ -1,4 +1,5 @@
 #include "Grid.h"
+#include <iostream>
 
 // Constructor
 Grid::Grid(int x, int y)
@@ -56,27 +57,19 @@ void Grid::draw(sf::RenderWindow& window)
 	}
 }
 
-void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, sf::Color color)
+void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, sf::Color color, sf::Shape &&shape)
 {
-	sf::RectangleShape node{};
-	
-	node.setSize(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE));
-
+	shape.setFillColor(color);
 	for (const auto& tile : path)
 	{
-		node.setFillColor(color);
-		sf::Vector2f correctedPosition(
-			(tile->pos.x * DEFAULT_TILE_SIZE) + ((float)WINDOW_WIDTH / 2) - (MAP_WIDTH/2.*DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
-			(tile->pos.y * DEFAULT_TILE_SIZE) + ((float)WINDOW_HEIGHT / 2) - (MAP_WIDTH/2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
-		);
-		node.setPosition(correctedPosition);
-		window.draw(node);
+		shape.setPosition(offsetPosition(tile->pos));
+		window.draw(shape);
 	}
 }
 
-void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, int r, int g, int b, int a)
+void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, int r, int g, int b, int a, sf::Shape&& shape)
 {
-	draw(window, path, sf::Color(r, g, b, a));
+	draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape));
 }
 
 
@@ -233,6 +226,14 @@ sf::Vector2f& Grid::getB()
 sf::Vector2f& Grid::getA()
 {
 	return this->aPos;
+}
+
+inline sf::Vector2f Grid::offsetPosition(const sf::Vector2f& position)
+{
+	return sf::Vector2f(
+		(position.x * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
+		(position.y * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
+	);
 }
 
 

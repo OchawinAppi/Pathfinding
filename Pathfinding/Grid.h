@@ -1,10 +1,5 @@
 #pragma once
-
-// Standard libraries
-#include <vector>
 #include "Cell.h"
-
-
 
 
 class Grid
@@ -33,9 +28,9 @@ public:
 
 	// Displaying - SFML
 	void draw(sf::RenderWindow &window);
-	void draw(sf::RenderWindow &window, std::vector<Cell*> path, sf::Color color);
-	void draw(sf::RenderWindow &window, std::vector<Cell*> path, int r, int g, int b, int a);
-	void drawNodes(sf::RenderWindow &window);
+	void draw(sf::RenderWindow &window, std::vector<Cell*> path, sf::Color color , sf::Shape&& shape);
+	void draw(sf::RenderWindow &window, std::vector<Cell*> path, int r, int g, int b, int a, sf::Shape&& shape);
+
 
 	// Getting Specific cell ( will need this later )
 	inline Cell& at(int x, int y);
@@ -44,7 +39,7 @@ public:
 
 	bool inBounds(int x, int x_size, int y, int y_size);
 
-	// Points
+	// Points 
 
 	void initA(const sf::Vector2f &pos);
 	void initB(const sf::Vector2f &pos);
@@ -59,13 +54,6 @@ public:
 	sf::Vector2f &getB();
 	sf::Vector2f &getA();
 
-	inline sf::Vector2f offsetPosition(const sf::Vector2f& position) const
-	{
-		return sf::Vector2f(
-			(position.x * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
-			(position.y * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
-		);
-	
-	}
+	static inline sf::Vector2f offsetPosition(const sf::Vector2f& position);
 };
 

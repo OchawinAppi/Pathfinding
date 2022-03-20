@@ -1,5 +1,4 @@
 #include "Grid.h"
-#include "utils.h"
 #include "A-Star-Functions.h"
 
 
@@ -8,7 +7,7 @@ int main()
 
     Grid map{ MAP_WIDTH, MAP_HEIGHT };
 
-    map.print();
+
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Path Finding");
 
@@ -161,12 +160,11 @@ int main()
         
         // DRAWING
         map.draw(window);
-        map.draw(window, enclosedCellRoom, 200, 200, 200, 100);
-        map.draw(window, path, sf::Color::Cyan);
+        map.draw(window, enclosedCellRoom, 200, 200, 200, 100, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f));
+        map.draw(window, path, sf::Color::Yellow, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f));
         
         window.display();
         run_count++;
 
     }
-    map.print();
 }

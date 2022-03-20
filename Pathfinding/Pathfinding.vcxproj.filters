@@ -44,9 +44,6 @@
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="A-Star-Functions.h">
       <Filter>A-Star</Filter>
     </ClInclude>
