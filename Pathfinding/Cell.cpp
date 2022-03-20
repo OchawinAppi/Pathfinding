@@ -34,8 +34,8 @@ Cell::Cell(int g, int h, bool _solid, int _x, int _y, Direction _direction) :
 
 	// Note: Multiply by 
 	tile.setPosition(
-		(pos.x * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_WIDTH / 2) * DEFAULT_TILE_SIZE,
-		(pos.y * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_HEIGHT / 2) * DEFAULT_TILE_SIZE
+		(pos.x * DEFAULT_TILE_SIZE) + ((float)WINDOW_WIDTH / 2) - (MAP_WIDTH/2.*DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
+		(pos.y * DEFAULT_TILE_SIZE) + ((float)WINDOW_HEIGHT / 2) - (MAP_HEIGHT / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
 	);
 }
 

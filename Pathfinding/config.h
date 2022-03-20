@@ -9,6 +9,7 @@ constexpr int MAP_WIDTH = 40;
 constexpr int MAP_HEIGHT = 40;
 
 // Tile
-constexpr float DEFAULT_TILE_SIZE = 10.f;
+//constexpr float DEFAULT_TILE_SIZE = ((float)WINDOW_WIDTH/MAP_WIDTH) - 3.f;
+constexpr float DEFAULT_TILE_SIZE = 17.f;
 
 

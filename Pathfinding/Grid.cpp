@@ -66,8 +66,8 @@ void Grid::drawPath(sf::RenderWindow& window, std::vector<Cell*> path)
 	{
 		node.setFillColor(sf::Color(0, 150, 150 ,255));
 		sf::Vector2f correctedPosition(
-			(tile->pos.x * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_WIDTH / 2) * DEFAULT_TILE_SIZE,
-			(tile->pos.y * DEFAULT_TILE_SIZE) + (WINDOW_HEIGHT / 2) - (MAP_HEIGHT / 2) * DEFAULT_TILE_SIZE
+			(tile->pos.x * DEFAULT_TILE_SIZE) + ((float)WINDOW_WIDTH / 2) - (MAP_WIDTH/2.*DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
+			(tile->pos.y * DEFAULT_TILE_SIZE) + ((float)WINDOW_HEIGHT / 2) - (MAP_WIDTH/2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
 		);
 		node.setPosition(correctedPosition);
 		window.draw(node);

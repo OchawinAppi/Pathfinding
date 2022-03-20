@@ -25,8 +25,8 @@ int main()
         float yRatio = static_cast<float>(window.getSize().y) / WINDOW_HEIGHT;
         mousePosition = sf::Mouse::getPosition(window);
 
-        mousePosition.x -= static_cast<int>((static_cast<float>(window.getSize().x) / 2) - static_cast<float>((MAP_HEIGHT / 2)) * DEFAULT_TILE_SIZE * xRatio);
-        mousePosition.y -= static_cast<int>((static_cast<float>(window.getSize().y) / 2) - static_cast<float>((MAP_HEIGHT / 2)) * DEFAULT_TILE_SIZE * yRatio);
+        mousePosition.x -= static_cast<int>((static_cast<float>(window.getSize().x) / 2) - static_cast<float>((MAP_WIDTH / 2)) * DEFAULT_TILE_SIZE * xRatio - (DEFAULT_TILE_SIZE * xRatio));
+        mousePosition.y -= static_cast<int>((static_cast<float>(window.getSize().y) / 2) - static_cast<float>((MAP_HEIGHT / 2)) * DEFAULT_TILE_SIZE * yRatio - (DEFAULT_TILE_SIZE * xRatio));
 
         sf::Vector2i mouseGridPos{ 
             static_cast<int>(mousePosition.x / (DEFAULT_TILE_SIZE * xRatio)), 
