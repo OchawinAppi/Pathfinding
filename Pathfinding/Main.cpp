@@ -4,18 +4,12 @@
 
 int main()
 {
-
     Grid map{ MAP_WIDTH, MAP_HEIGHT };
-
-
-
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Path Finding");
-
     sf::Vector2i mousePosition;
     std::vector<Cell*> path{};
 
     bool diag = true;
-
     bool pathUpdate = true;
     bool pathBlocked = false; // Cannot route
     sf::Vector2f* enclosedCell{};
@@ -28,9 +22,6 @@ int main()
 
     while (window.isOpen())
     {
-
-        
-
         int time = clock.restart().asMilliseconds();
         
         if (searchDrawingTime/SEARCHED_DISPLAY_RATE < map.getSearched().size())
@@ -39,8 +30,6 @@ int main()
         }
         else pathDrawingTime += static_cast<int>(time);
         
-        
-
         float xRatio = static_cast<float>(window.getSize().x) / WINDOW_WIDTH;
         float yRatio = static_cast<float>(window.getSize().y) / WINDOW_HEIGHT;
         mousePosition = sf::Mouse::getPosition(window);
@@ -170,7 +159,6 @@ int main()
                     enclosedCellRoom.push_back(var);
                 }
             }
-
             pathUpdate = false;
         }
 
@@ -178,8 +166,6 @@ int main()
             path = {};
             map.resetSearched();
         }
-
-
         // CLEAR SCENE
         window.clear();
         

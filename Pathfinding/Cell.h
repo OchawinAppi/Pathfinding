@@ -29,7 +29,6 @@ public:
 	// Methods
 	void makeSolid();
 	void makeEmpty();
-	void makePath();
 	void updateG(int n);
 	void updateH(int n);
 	void updateF();
@@ -43,8 +42,5 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const Cell& cell);
 	bool operator== (const Cell& other) const;
 	bool operator!= (const Cell& other) const;
-
-	// Points
-	void placeLetter(char _c);
 };
 

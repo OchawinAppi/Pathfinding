@@ -50,11 +50,6 @@ void Cell::makeEmpty()
 	this->c = ' ';
 }
 
-void Cell::makePath()
-{
-	c = '.';
-}
-
 void Cell::updateG(int n) 
 {
 	this->G_dist = n;
@@ -93,13 +88,10 @@ void Cell::draw(sf::RenderWindow &window)
 		{
 		case 'A': tile.setFillColor(sf::Color::Red); break;
 		case 'B': tile.setFillColor(sf::Color::Blue); break;
-		case '.': tile.setFillColor(sf::Color::Yellow); break;
 		default: tile.setFillColor(sf::Color::Black);
 		}
 	}
-
 	window.draw(tile);
-
 }
 
 void Cell::setColor(sf::Color color)
@@ -115,11 +107,6 @@ bool Cell::operator==(const Cell& other) const
 bool Cell::operator!=(const Cell& other) const
 {
 	return this->pos.x != other.pos.x || this->pos.y != other.pos.y;;
-}
-
-void Cell::placeLetter(char _c)
-{
-	this->c = _c;
 }
 
 std::ostream& operator<<(std::ostream& os, const Cell& cell)

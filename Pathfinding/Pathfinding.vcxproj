@@ -166,7 +166,6 @@
   <ItemGroup>
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Config.h" />
-    <ClInclude Include="Directions.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="A-Star-Functions.h" />
     <ClInclude Include="utils.h" />

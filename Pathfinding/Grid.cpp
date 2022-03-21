@@ -68,7 +68,7 @@ void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, sf::Color col
 	for (const auto& tile : path)
 	{
 		if (drawCount == count++) return;
-		if (tile->c != ' ') continue;
+		if (tile->c != ' ' || tile->solid) continue;
 		shape.setScale(newScale);
 		shape.setPosition(offsetPosition(tile->pos));
 		shape.move(sf::Vector2f(delta, delta));
@@ -236,10 +236,6 @@ std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos, bool diag)
 		}
 		return neighbors;
 	}
-
-
-
-
 
 	for (int _x = x - 1; _x < x + 2; _x++)
 	{

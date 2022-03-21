@@ -232,7 +232,6 @@ std::vector<Cell*> a_star(Grid& map, sf::Vector2f &start_node, sf::Vector2f &tar
 		}
 	}
 	
-
 	// BACKTRACK
 	Cell* next = &map.at(target_node);
 	
