@@ -110,10 +110,10 @@ int main()
                     }
                     map.at(mouseGridPos).makeSolid();
 
-                    if (map.at(mouseGridPos).isPath)
-                    {
+                    //if (map.at(mouseGridPos).isPath)
+                    //{
                         pathUpdate = true;
-                    }
+                    //}
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
                 {   
