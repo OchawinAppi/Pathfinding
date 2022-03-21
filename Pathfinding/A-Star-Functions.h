@@ -1,7 +1,7 @@
 #pragma once
 
 #include <math.h>
-#include "Grid.h"
+#include "grid.h"
 #include <unordered_map>
 #include "utils.h"
 

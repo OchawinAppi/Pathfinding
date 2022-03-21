@@ -46,6 +46,6 @@ constexpr inline void log(Args&& ... args)
 sf::Vector2f offset(sf::Vector2f& pos)
 {
 	return sf::Vector2f(
-		(pos.x * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
-		(pos.y * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_HEIGHT / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE);
+		(pos.x * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2.f * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
+		(pos.y * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_HEIGHT / 2.f * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE);
 }

@@ -159,15 +159,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Cell.cpp" />
-    <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="cell.cpp" />
+    <ClCompile Include="grid.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="prims.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Cell.h" />
-    <ClInclude Include="Config.h" />
-    <ClInclude Include="Grid.h" />
-    <ClInclude Include="A-Star-Functions.h" />
+    <ClInclude Include="cell.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="grid.h" />
+    <ClInclude Include="a-star-functions.h" />
+    <ClInclude Include="mazealgo.h" />
+    <ClInclude Include="prims.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
