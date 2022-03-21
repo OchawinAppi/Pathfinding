@@ -14,7 +14,6 @@ int main()
     sf::Vector2i mousePosition;
     std::vector<Cell*> path{};
 
-    int run_count = 0;
     bool diag = true;
 
     bool pathUpdate = true;
@@ -170,8 +169,6 @@ int main()
                 {
                     enclosedCellRoom.push_back(var);
                 }
-
-                //log("PATH BLOCKED", enclosedCell->x, enclosedCell->y, target, enclosedCellRoom.size());
             }
 
             pathUpdate = false;
@@ -189,11 +186,9 @@ int main()
         // DRAWING
         map.draw(window);
         map.draw(window, enclosedCellRoom, 200, 200, 200, 100, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f), enclosedCellRoom.size());
-        map.draw(window, map.getSearched(), 200, 200, 200, 100, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f), searchDrawingTime/ SEARCHED_DISPLAY_RATE);
-        map.draw(window, path, sf::Color::Yellow, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f), pathDrawingTime/ PATH_CONSTRUCTION_RATE);
+        map.draw(window, map.getSearched(), 200, 200, 200, 100, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), searchDrawingTime/ SEARCHED_DISPLAY_RATE, 0.86);
+        map.draw(window, path, sf::Color::Yellow, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), pathDrawingTime/ PATH_CONSTRUCTION_RATE, 0.42);
         
         window.display();
-        run_count++;
-
     }
 }

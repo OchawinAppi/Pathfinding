@@ -57,21 +57,27 @@ void Grid::draw(sf::RenderWindow& window)
 	}
 }
 
-void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, sf::Color color, sf::Shape &&shape, int drawCount)
+void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, sf::Color color, sf::Shape &&shape, int drawCount, float scale)
 {
+	sf::Vector2f newScale(scale, scale);
+
+	float delta = (static_cast<float>(DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE * scale)/2;
+
 	shape.setFillColor(color);
 	int count = 0;
 	for (const auto& tile : path)
 	{
 		if (drawCount == count++) return;
+		shape.setScale(newScale);
 		shape.setPosition(offsetPosition(tile->pos));
+		shape.move(sf::Vector2f(delta, delta));
 		window.draw(shape);
 	}
 }
 
-void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, int r, int g, int b, int a, sf::Shape&& shape, int drawCount)
+void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, int r, int g, int b, int a, sf::Shape&& shape, int drawCount, float scale)
 {
-	draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount);
+	draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount, scale);
 }
 
 
