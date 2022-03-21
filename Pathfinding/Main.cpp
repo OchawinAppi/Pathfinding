@@ -118,7 +118,6 @@ int main()
                         else if (c == 'B')
                         {
                             map.resetB();
-                          
                         }
                     }
                     map.at(mouseGridPos).makeSolid();

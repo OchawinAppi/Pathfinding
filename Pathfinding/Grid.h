@@ -41,6 +41,7 @@ public:
 	void resetA();
 	void resetB();
 	void resetGrid();
+	void resetPath();
 
 	std::vector<Cell*> getNeighbors(const sf::Vector2f& pos, bool diag);
 	sf::Vector2f &getB();

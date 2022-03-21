@@ -163,10 +163,22 @@ void Grid::resetB()
 	bPos.y = -1;
 }
 
+void Grid::resetPath()
+{
+	for (int y = 1; y < MAP_HEIGHT + 1; ++y)
+	{
+		for (int x = 1; x < MAP_WIDTH + 1; ++x)
+		{
+			this->at(y, x).isPath = false;
+		}
+	}
+}
+
 void Grid::resetGrid()
 {
 	resetA();
 	resetB();
+	
 	for (int y = 1; y < MAP_HEIGHT+1; ++y)
 	{
 		for (int x = 1; x < MAP_WIDTH+1; ++x)
@@ -176,6 +188,7 @@ void Grid::resetGrid()
 			this->at(y, x).H_dist = 0;
 			this->at(y, x).solid = false;
 			this->at(y, x).c = ' ';
+			this->at(y, x).isPath = false;
 		}
 	}
 
@@ -270,6 +283,7 @@ void Grid::addSearched(Cell* cell)
 void Grid::resetSearched()
 {
 	searched.clear();
+	resetPath();
 }
 
 
