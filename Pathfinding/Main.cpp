@@ -24,7 +24,7 @@ int main()
     {
         int time = clock.restart().asMilliseconds();
         
-        if (searchDrawingTime/SEARCHED_DISPLAY_RATE < map.getSearched().size())
+        if (searchDrawingTime/SEARCHED_DISPLAY_RATE < static_cast<int>(map.getSearched().size()))
         {
             searchDrawingTime += static_cast<int>(time);
         }
@@ -172,9 +172,10 @@ int main()
         // DRAWING
         map.draw(window);
         map.draw(window, enclosedCellRoom, 200, 200, 200, 100, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f), enclosedCellRoom.size());
-        map.draw(window, map.getSearched(), 200, 200, 200, 100, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), searchDrawingTime/ SEARCHED_DISPLAY_RATE, 0.86);
-        map.draw(window, path, sf::Color::Yellow, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), pathDrawingTime/ PATH_CONSTRUCTION_RATE, 0.42);
+        map.draw(window, map.getSearched(), 200, 200, 200, 100, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), searchDrawingTime/ SEARCHED_DISPLAY_RATE, 0.86f);
+        map.draw(window, path, sf::Color::Yellow, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), pathDrawingTime/ PATH_CONSTRUCTION_RATE, 0.42f);
         
+        // DISPLAY
         window.display();
     }
 }

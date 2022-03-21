@@ -49,7 +49,7 @@ auto indiscriminateSearch(Grid& map, sf::Vector2f& start_node1, char target_lett
 	Cell* current_node2 = nullptr;
 
 	int count = 0;
-	while (collectedNodes1.size() > count && collectedNodes2.size()>count)
+	while (static_cast<int>(collectedNodes1.size()) > count && collectedNodes2.size()>count)
 	{
 		current_node1 = collectedNodes1.at(count);
 		current_node2 = collectedNodes2.at(count);
