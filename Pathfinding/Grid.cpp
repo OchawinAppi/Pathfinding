@@ -68,6 +68,7 @@ void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, sf::Color col
 	for (const auto& tile : path)
 	{
 		if (drawCount == count++) return;
+		if (tile->c != ' ') continue;
 		shape.setScale(newScale);
 		shape.setPosition(offsetPosition(tile->pos));
 		shape.move(sf::Vector2f(delta, delta));
