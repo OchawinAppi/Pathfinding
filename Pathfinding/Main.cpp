@@ -22,9 +22,26 @@ int main()
     sf::Vector2f* enclosedCell{};
     std::vector<Cell*> enclosedCellRoom{};
     char target{};
+    sf::Clock clock;
+
+    int searchDrawingTime = 0;
+    int pathDrawingTime = 0;
 
     while (window.isOpen())
     {
+
+        
+
+        int time = clock.restart().asMilliseconds();
+        
+        if (searchDrawingTime/SEARCHED_DISPLAY_RATE < map.getSearched().size())
+        {
+            searchDrawingTime += static_cast<int>(time);
+        }
+        else pathDrawingTime += static_cast<int>(time);
+        
+        
+
         float xRatio = static_cast<float>(window.getSize().x) / WINDOW_WIDTH;
         float yRatio = static_cast<float>(window.getSize().y) / WINDOW_HEIGHT;
         mousePosition = sf::Mouse::getPosition(window);
@@ -133,6 +150,9 @@ int main()
         // UPDATE SCENE
         if (map.canRoute() && pathUpdate && !pathBlocked)
         {
+            searchDrawingTime = 0;
+            pathDrawingTime = 0;
+
             enclosedCellRoom = {};
             path = a_star(map, map.getA(), map.getB(), diag);
 
@@ -158,15 +178,20 @@ int main()
             pathUpdate = false;
         }
 
-        if (!map.canRoute() || pathBlocked) path = {};
+        if (!map.canRoute() || pathBlocked) {
+            path = {};
+            map.resetSearched();
+        }
+
 
         // CLEAR SCENE
         window.clear();
         
         // DRAWING
         map.draw(window);
-        map.draw(window, enclosedCellRoom, 200, 200, 200, 100, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f));
-        map.draw(window, path, sf::Color::Yellow, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f));
+        map.draw(window, enclosedCellRoom, 200, 200, 200, 100, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f), enclosedCellRoom.size());
+        map.draw(window, map.getSearched(), 200, 200, 200, 100, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f), searchDrawingTime/ SEARCHED_DISPLAY_RATE);
+        map.draw(window, path, sf::Color::Yellow, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f), pathDrawingTime/ PATH_CONSTRUCTION_RATE);
         
         window.display();
         run_count++;

@@ -6,6 +6,7 @@ class Grid
 {
 private:
 	std::vector<std::vector<Cell>> grid;
+	std::vector<Cell*> searched;
 	sf::Vector2f aPos;
 	sf::Vector2f bPos;
 public:
@@ -20,8 +21,8 @@ public:
 
 	// Displaying - SFML
 	void draw(sf::RenderWindow &window);
-	void draw(sf::RenderWindow &window, std::vector<Cell*> path, sf::Color color , sf::Shape&& shape);
-	void draw(sf::RenderWindow &window, std::vector<Cell*> path, int r, int g, int b, int a, sf::Shape&& shape);
+	void draw(sf::RenderWindow &window, std::vector<Cell*> path, sf::Color color , sf::Shape&& shape, int drawCount);
+	void draw(sf::RenderWindow &window, std::vector<Cell*> path, int r, int g, int b, int a, sf::Shape&& shape, int drawCount);
 
 
 	// Getting Specific cell ( will need this later )
@@ -46,5 +47,9 @@ public:
 	sf::Vector2f &getA();
 
 	static inline sf::Vector2f offsetPosition(const sf::Vector2f& position);
+
+	std::vector<Cell*>& getSearched();
+	void addSearched(Cell* cell);
+	void resetSearched();
 };
 

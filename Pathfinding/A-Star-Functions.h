@@ -144,6 +144,7 @@ inline int heuristic(sf::Vector2f &node, sf::Vector2f &target) {
 
 std::vector<Cell*> a_star(Grid& map, sf::Vector2f &start_node, sf::Vector2f &target_node, bool diag)
 {
+	map.resetSearched();
 	map.at(start_node).updateG(0);
 	map.at(start_node).updateH(heuristic(start_node, target_node));
 	map.at(start_node).updateF();
@@ -184,7 +185,7 @@ std::vector<Cell*> a_star(Grid& map, sf::Vector2f &start_node, sf::Vector2f &tar
 				}
 			}
 		}
-
+		map.addSearched(current_node);
 	
 		if ((current_node->pos.x == target_node.x) && (current_node->pos.y == target_node.y))
 		{

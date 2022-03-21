@@ -57,19 +57,21 @@ void Grid::draw(sf::RenderWindow& window)
 	}
 }
 
-void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, sf::Color color, sf::Shape &&shape)
+void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, sf::Color color, sf::Shape &&shape, int drawCount)
 {
 	shape.setFillColor(color);
+	int count = 0;
 	for (const auto& tile : path)
 	{
+		if (drawCount == count++) return;
 		shape.setPosition(offsetPosition(tile->pos));
 		window.draw(shape);
 	}
 }
 
-void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, int r, int g, int b, int a, sf::Shape&& shape)
+void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, int r, int g, int b, int a, sf::Shape&& shape, int drawCount)
 {
-	draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape));
+	draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount);
 }
 
 
@@ -253,6 +255,21 @@ inline sf::Vector2f Grid::offsetPosition(const sf::Vector2f& position)
 		(position.x * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
 		(position.y * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
 	);
+}
+
+std::vector<Cell*>& Grid::getSearched()
+{
+	return searched;
+}
+
+void Grid::addSearched(Cell* cell)
+{
+	searched.push_back(cell);
+}
+
+void Grid::resetSearched()
+{
+	searched.clear();
 }
 
 

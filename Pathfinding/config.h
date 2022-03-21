@@ -12,4 +12,7 @@ constexpr int MAP_HEIGHT = 40;
 //constexpr float DEFAULT_TILE_SIZE = ((float)WINDOW_WIDTH/MAP_WIDTH) - 3.f;
 constexpr float DEFAULT_TILE_SIZE = 17.f;
 
+// How fast nodes are displayed ( Higher value == slower )
 
+constexpr int SEARCHED_DISPLAY_RATE = 1;
+constexpr int PATH_CONSTRUCTION_RATE = 15;
