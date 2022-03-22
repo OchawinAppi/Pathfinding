@@ -5,14 +5,19 @@
 class Grid
 {
 private:
-	std::vector<std::vector<Cell>> grid;
+	using CellPtr = std::unique_ptr<Cell>;
+	using CellPtrVec = std::vector<CellPtr>;
+
+	std::unique_ptr<std::vector<CellPtrVec>> grid;
+
+
 	std::vector<Cell*> searched;
 	sf::Vector2f aPos;
 	sf::Vector2f bPos;
 public:
 	// Constructor
 	Grid(int x, int y);
-
+	virtual ~Grid() = default;
 	// Destructor not needed. The compiler got this. ;) ( probably )
 
 	// Displaying - Console

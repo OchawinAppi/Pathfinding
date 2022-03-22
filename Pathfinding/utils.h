@@ -3,12 +3,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-sf::Vector2i vfToVi(sf::Vector2f vec)
+sf::Vector2i vfToVi(const sf::Vector2f &vec)
 {
 	return sf::Vector2i(static_cast<int>(vec.x), static_cast<int>(vec.y));
 }
 
-sf::Vector2f viToVf(sf::Vector2i vec)
+sf::Vector2f viToVf(const sf::Vector2i &vec)
 {
 	return sf::Vector2f(static_cast<float>(vec.x), static_cast<float>(vec.y));
 }
@@ -23,10 +23,7 @@ bool isAnyKeyPressed()
 	return false;
 }
 
-inline int getPositionCode(sf::Vector2f pos)
-{
-	return (static_cast<int>(pos.x) + static_cast<int>(pos.y) * MAP_WIDTH);
-}
+
 
 template <typename  ... Args>
 constexpr inline void logT(std::string_view title, Args&& ... args)

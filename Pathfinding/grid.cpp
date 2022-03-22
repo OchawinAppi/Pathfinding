@@ -1,22 +1,25 @@
 #include "grid.h"
-#include <iostream>
+
 
 // Constructor
 Grid::Grid(int x, int y)
 {
+	grid = std::unique_ptr<std::vector<CellPtrVec>>(new std::vector<CellPtrVec>());
+
 	x += 2;
 	y += 2;
 	for (int i = 0; i < static_cast<int>(y); ++i) {
-		grid.push_back({});
+		grid->push_back({});
 		for (int j = 0; j < static_cast<int>(x); ++j) {
 			if (i == 0 || i == y - 1 || j == 0 || j == x - 1) {
-				grid.at(i).emplace_back(0, 0, true, j, i);
+				grid->at(i).push_back(std::make_unique<Cell>(0, 0, true, j, i));
 			}
 			else {
-				grid.at(i).emplace_back(0, 0, false, j, i);
+				grid->at(i).push_back(std::make_unique<Cell>(0, 0, false, j, i));
 			}
 		}
 	}
+	grid = std::move(grid);
 	aPos = sf::Vector2f(-1, -1);
 	bPos = sf::Vector2f(-1, -1);
 }
@@ -27,9 +30,9 @@ Grid::Grid(int x, int y)
 // Displaying
 void Grid::print()
 {
-	for (int i = 0; i < static_cast<int>(grid.size()); i++) {
-		for (int j = 0; j < static_cast<int>(grid.at(0).size()); j++) {
-			std::cout << grid.at(i).at(j);
+	for (int i = 0; i < static_cast<int>(grid->size()); i++) {
+		for (int j = 0; j < static_cast<int>(grid->at(0).size()); j++) {
+			std::cout << *grid->at(i).at(j);
 
 		}
 		std::cout << "\n";
@@ -39,9 +42,9 @@ void Grid::print()
 // Overloading cout op
 std::ostream& operator<<(std::ostream& os, const Grid& map)
 {
-	for (int i = 0; i < static_cast<int>(map.grid.size()); i++) {
-		for (int j = 0; j < static_cast<int>(map.grid.at(0).size()); j++) {
-			os << map.grid.at(i).at(j);
+	for (int i = 0; i < static_cast<int>(map.grid->size()); i++) {
+		for (int j = 0; j < static_cast<int>(map.grid->at(0).size()); j++) {
+			os << map.grid->at(i).at(j);
 		}
 		os << "\n";
 	}
@@ -50,9 +53,9 @@ std::ostream& operator<<(std::ostream& os, const Grid& map)
 
 void Grid::draw(sf::RenderWindow& window)
 {
-	for (int y = 0; y < static_cast<int>(grid.size()); y++) {
-		for (int x = 0; x < static_cast<int>(grid.at(0).size()); x++) {
-			grid.at(y).at(x).draw(window);
+	for (int y = 0; y < static_cast<int>(grid->size()); y++) {
+		for (int x = 0; x < static_cast<int>(grid->at(0).size()); x++) {
+			grid->at(y).at(x)->draw(window);
 		}
 	}
 }
@@ -85,7 +88,7 @@ void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, int r, int g,
 // Getting Specific cell ( will need this later )
 inline Cell& Grid::at(int x, int y)
 {
-	return grid.at(y).at(x);
+	return *grid->at(y).at(x);
 }
 
 Cell& Grid::at(const sf::Vector2i& pos)

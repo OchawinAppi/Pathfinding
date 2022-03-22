@@ -10,7 +10,6 @@ Cell::Cell()
 
 	c = ' ';
 	solid = false;
-	isChecked = false;
 
 	// SFML
 	tile = sf::RectangleShape{};
@@ -65,15 +64,6 @@ void Cell::updateF()
 	this->F_dist = this->H_dist + this->G_dist;
 }
 
-bool& Cell::getChecked()
-{
-	return isChecked;
-}
-
-void Cell::checked() 
-{
-	this->isChecked = true;
-}
 
 void Cell::draw(sf::RenderWindow &window)
 {

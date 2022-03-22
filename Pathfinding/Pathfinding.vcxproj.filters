@@ -16,6 +16,9 @@
     <Filter Include="A-Star">
       <UniqueIdentifier>{f40af7a9-a315-4b39-8e3a-b70384e79470}</UniqueIdentifier>
     </Filter>
+    <Filter Include="all-in-one-package">
+      <UniqueIdentifier>{7cdc15d7-9e15-46af-a858-2b8a8ba909f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -29,6 +32,9 @@
     </ClCompile>
     <ClCompile Include="prims.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="build.cpp">
+      <Filter>all-in-one-package</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 #pragma once
 #include "config.h"
 #include <SFML/Graphics.hpp>
-
+#include <iostream>
 
 class Cell {
 public:
@@ -9,14 +9,11 @@ public:
 	int G_dist;
 	int H_dist;
 	int F_dist;
-
 	bool isPath = false;
-
 	sf::Vector2f pos;
-
 	bool solid; // <- Won't evaluate solid cells ( walls )
 	char c; // <- for printing on console ( pre-sfml ) AND conditional checking!
-	bool isChecked = false; // <- for A-Star
+
 
 	// SFML
 	sf::RectangleShape tile;
@@ -24,7 +21,7 @@ public:
 	// Constructors
 	Cell();
 	Cell(int g, int h, bool _solid, int _x, int _y);
-	// Destructor not needed. The compiler got this. ;) ( probably )
+	virtual ~Cell() = default;
 	
 	// Methods
 	void makeSolid();
@@ -32,8 +29,6 @@ public:
 	void updateG(int n);
 	void updateH(int n);
 	void updateF();
-	bool& getChecked();
-	void checked();
 	void draw(sf::RenderWindow& window); // <- SFML
 
 	void setColor(sf::Color color);

@@ -87,44 +87,6 @@ auto indiscriminateSearch(Grid& map, sf::Vector2f& start_node1, char target_lett
 
 }
 
-auto indiscriminateSearch(Grid& map, sf::Vector2f& start_node, char target_letter, bool diag)
-{
-	log("SEARCHING", target_letter);
-	struct returnInfo
-	{
-		bool blocked;
-		int size;
-	};
-
-	std::vector<Cell*> collectedNodesFromStart{ &map.at(start_node) };
-
-	Cell* current_node = nullptr;
-	int count = 0;
-	while (collectedNodesFromStart.size() > count)
-	{
-		current_node = collectedNodesFromStart.at(count);
-		log(current_node->c, target_letter);
-		if (current_node->c == target_letter) return returnInfo{ false, count };
-
-		const auto& neighbors = map.getNeighbors(current_node->pos, diag);
-
-		if (neighbors.size() == 0)
-		{
-			returnInfo{ true, count };
-		}
-
-		for (auto* neighbor : neighbors)
-		{
-			if (contatinsPtr(collectedNodesFromStart, neighbor)) continue;
-			collectedNodesFromStart.push_back(neighbor);
-		}
-		++count;
-	}
-	log("DONE");
-	return returnInfo{ true, count };
-	
-}
-
 
 // Note, for simplicity, we covert 1.0 and 1.4 to 10 and 14. We hate decimals.
 inline int heuristic(sf::Vector2f &node, sf::Vector2f &target) {
