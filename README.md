@@ -10,20 +10,21 @@ However, if you wish to build the project on your machine then you might have to
 If you wish to build on windows via g++, you need to install `SFML for GCC 7.3.0 MinGW`.\
 Otherwise, if you use MSC++ to build, then there is no need to install SFML.
 
-# Build Instructions
+# Build Instructions ( CLI )
 
 For `Linux`/ `Mac`
-1. `wget https://github.com/OchawinAppi/Pathfinding/blob/master/Pathfinding/build.cpp`
+1. `wget https://raw.githubusercontent.com/OchawinAppi/Pathfinding/master/Pathfinding/build.cpp`
 2. `g++ build.cpp -O3 -o pathfinder -std=c++17 -lsfml-window -lsfml-system -lsfml-graphics`
 3. `./pathfinder`
 
-For `windows g++` (Replace <PATH_TO_SFML_SFML-2.5.1>)
-1. `wget https://github.com/OchawinAppi/Pathfinding/blob/master/Pathfinding/build.cpp`
-2. `xcopy <PATH_TO_SFML_SFML-2.5.1>\bin\*.dll .`
-3. `g++ -I<PATH_TO_SFML_SFML-2.5.1>\include -L<PATH_TO_SFML_SFML-2.5.1>\lib build.cpp -O3 -o pathfinder -std=c++17 -lsfml-window -lsfml-system -lsfml-graphics`
-4. `pathfinder.exe`
+For `windows g++` (Replace <PATH_TO_SFML_SFML-2.5.1> on line 3)
+1. `wget https://raw.githubusercontent.com/OchawinAppi/Pathfinding/master/Pathfinding/build.cpp`
+2. `SET "sfml_path=<PATH_TO_SFML_SFML-2.5.1>"` eg. SET "sfml_path=C:\Programs\SFML-2.5.1"
+3. `xcopy "%sfml_path%"\bin\*.dll .`
+4. `g++ -I"%sfml_path%"\include -L"%sfml_path%"\lib build.cpp -O3 -o pathfinder -std=c++17 -lsfml-window -lsfml-system -lsfml-graphics`
+5. `pathfinder.exe`
 
-Configurations can be made by editting the variables on top of build.cpp.
+Configurations can be made by editting the variables declared in CONFIG in the code.
 
 ## Controls:
 `A` - Place Start Node\
