@@ -2,13 +2,14 @@
 #include <vector>
 #include <unordered_map>
 
-// CONFIG
-constexpr int WINDOW_WIDTH = 400;			// Window stuff
+//// CONFIG ////
+constexpr int WINDOW_WIDTH = 800;			// Window stuff
 constexpr int WINDOW_HEIGHT = 800;
-constexpr int MAP_WIDTH = 60;				// Map stuff
-constexpr int MAP_HEIGHT = 120;
+constexpr int MAP_WIDTH = 40;				// Map stuff
+constexpr int MAP_HEIGHT = 40;
 constexpr float SIZE_MULTIPLIER = 1.f;		// Tile
-constexpr float DEFAULT_TILE_SIZE = static_cast<float>(WINDOW_WIDTH) / (MAP_WIDTH + 1) * SIZE_MULTIPLIER;
+constexpr int DECREASE_BOX_SIZE = 5;
+constexpr float DEFAULT_TILE_SIZE = static_cast<float>(WINDOW_WIDTH) / (MAP_WIDTH + 2 + DECREASE_BOX_SIZE) * SIZE_MULTIPLIER;
 constexpr int SEARCHED_DISPLAY_RATE = 1;	// How fast nodes are displayed ( Higher value == slower )
 constexpr int PATH_CONSTRUCTION_RATE = 15;
 
