@@ -1,5 +1,5 @@
-#include "grid.h"
-#include "a-star-functions.h"
+#include "Headers/grid.h"
+#include "Headers/a-star-functions.h"
 
 
 int main()

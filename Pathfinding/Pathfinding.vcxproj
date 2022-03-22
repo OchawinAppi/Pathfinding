@@ -166,15 +166,16 @@
     <ClCompile Include="cell.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="prims.cpp" />
+    <ClCompile Include="Src\prims.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cell.h" />
-    <ClInclude Include="config.h" />
-    <ClInclude Include="grid.h" />
-    <ClInclude Include="a-star-functions.h" />
-    <ClInclude Include="mazealgo.h" />
-    <ClInclude Include="prims.h" />
+    <ClInclude Include="Headers\a-star-functions.h" />
+    <ClInclude Include="Headers\cell.h" />
+    <ClInclude Include="Headers\config.h" />
+    <ClInclude Include="Headers\grid.h" />
+    <ClInclude Include="Headers\mazealgo.h" />
+    <ClInclude Include="Headers\prims.h" />
+    <ClInclude Include="Headers\utils.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

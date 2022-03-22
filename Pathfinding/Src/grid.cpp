@@ -1,4 +1,4 @@
-#include "Headers/grid.h"
+#include "grid.h"
 
 
 // Constructor
