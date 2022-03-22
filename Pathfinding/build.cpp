@@ -3,11 +3,12 @@
 #include <unordered_map>
 
 // CONFIG
-constexpr int WINDOW_WIDTH = 800;			// Window stuff
+constexpr int WINDOW_WIDTH = 400;			// Window stuff
 constexpr int WINDOW_HEIGHT = 800;
-constexpr int MAP_WIDTH = 40;				// Map stuff
-constexpr int MAP_HEIGHT = 40;
-constexpr float DEFAULT_TILE_SIZE = 17.f;	// Tile
+constexpr int MAP_WIDTH = 60;				// Map stuff
+constexpr int MAP_HEIGHT = 120;
+constexpr float SIZE_MULTIPLIER = 1.f;		// Tile
+constexpr float DEFAULT_TILE_SIZE = static_cast<float>(WINDOW_WIDTH) / (MAP_WIDTH + 1) * SIZE_MULTIPLIER;
 constexpr int SEARCHED_DISPLAY_RATE = 1;	// How fast nodes are displayed ( Higher value == slower )
 constexpr int PATH_CONSTRUCTION_RATE = 15;
 
@@ -24,7 +25,7 @@ bool isAnyKeyPressed() {
 }
 sf::Vector2f offset(sf::Vector2f& pos) {
 	return sf::Vector2f(
-		(pos.x * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2.f * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
+		(pos.x * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_WIDTH) / 2) - (MAP_WIDTH / 2.f * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
 		(pos.y * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_HEIGHT / 2.f * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE);
 }
 
@@ -166,7 +167,7 @@ public:
 	void resetPath() {
 		for (int y = 1; y < MAP_HEIGHT + 1; ++y) {
 			for (int x = 1; x < MAP_WIDTH + 1; ++x) {
-				this->at(y, x).isPath = false;
+				this->at(x, y).isPath = false;
 			}
 		}
 	}
@@ -175,12 +176,12 @@ public:
 		resetB();
 		for (int y = 1; y < MAP_HEIGHT + 1; ++y) {
 			for (int x = 1; x < MAP_WIDTH + 1; ++x) {
-				this->at(y, x).F_dist = 0;
-				this->at(y, x).G_dist = 0;
-				this->at(y, x).H_dist = 0;
-				this->at(y, x).solid = false;
-				this->at(y, x).c = ' ';
-				this->at(y, x).isPath = false;
+				this->at(x, y).F_dist = 0;
+				this->at(x, y).G_dist = 0;
+				this->at(x, y).H_dist = 0;
+				this->at(x, y).solid = false;
+				this->at(x, y).c = ' ';
+				this->at(x, y).isPath = false;
 			}
 		}
 	}

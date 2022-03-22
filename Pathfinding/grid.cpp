@@ -179,7 +179,7 @@ void Grid::resetPath()
 	{
 		for (int x = 1; x < MAP_WIDTH + 1; ++x)
 		{
-			this->at(y, x).isPath = false;
+			this->at(x, y).isPath = false;
 		}
 	}
 }
@@ -193,16 +193,14 @@ void Grid::resetGrid()
 	{
 		for (int x = 1; x < MAP_WIDTH+1; ++x)
 		{
-			this->at(y, x).F_dist = 0;
-			this->at(y, x).G_dist = 0;
-			this->at(y, x).H_dist = 0;
-			this->at(y, x).solid = false;
-			this->at(y, x).c = ' ';
-			this->at(y, x).isPath = false;
+			this->at(x, y).F_dist = 0;
+			this->at(x, y).G_dist = 0;
+			this->at(x, y).H_dist = 0;
+			this->at(x, y).solid = false;
+			this->at(x, y).c = ' ';
+			this->at(x, y).isPath = false;
 		}
 	}
-
-	
 }
 
 
@@ -271,8 +269,8 @@ sf::Vector2f& Grid::getA()
 inline sf::Vector2f Grid::offsetPosition(const sf::Vector2f& position)
 {
 	return sf::Vector2f(
-		(position.x * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
-		(position.y * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
+		(position.x * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_WIDTH) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
+		(position.y * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_HEIGHT / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
 	);
 }
 
