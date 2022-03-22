@@ -1,3 +1,39 @@
+# Pre-requisites
+
+You need to have SFML installed.\
+Ubuntu -> `sudo apt-get install libsfml-dev`\
+MacOs -> `brew install sfml`\
+Others -> https://www.sfml-dev.org/download/sfml/2.5.1/
+
+Note: For window users you could grab the working application from release without downloading anything else.\
+However, if you wish to build the project on your machine then you might have to install SFML.\
+If you wish to build on windows via g++, you need to install `SFML for GCC 7.3.0 MinGW`.\
+Otherwise, if you use MSC++ to build, then there is no need to install SFML.
+
+# Build Instructions ( CLI )
+
+For `Linux`/ `Mac`
+1. `wget https://raw.githubusercontent.com/OchawinAppi/Pathfinding/master/Pathfinding/build.cpp`
+2. `g++ build.cpp -O3 -o pathfinder -std=c++17 -lsfml-window -lsfml-system -lsfml-graphics`
+3. `./pathfinder`
+
+For `windows g++ via cmd` (Replace <PATH_TO_SFML_SFML-2.5.1> on line 3)
+1. `wget https://raw.githubusercontent.com/OchawinAppi/Pathfinding/master/Pathfinding/build.cpp`
+2. `SET "sfml_path=<PATH_TO_SFML_SFML-2.5.1>"` eg. SET "sfml_path=C:\Programs\SFML-2.5.1"
+3. `xcopy "%sfml_path%"\bin\*.dll .`
+4. `g++ -I"%sfml_path%"\include -L"%sfml_path%"\lib build.cpp -O3 -o pathfinder -std=c++17 -lsfml-window -lsfml-system -lsfml-graphics`
+5. `pathfinder.exe`
+
+Configurations can be made by editting the variables declared in CONFIG in the code.
+
+## Controls:
+`A` - Place Start Node\
+`B` - Place End Node\
+`LC` - Place Wall\
+`LR` - Remove wall\
+`C` - Clear\
+`Space` - Toggle Diagonal Movement
+
 # Pathfinding
 
 This is a demonstration of the A* path finding algorithm.
