@@ -17,7 +17,7 @@ For `Linux`/ `Mac`
 2. `g++ build.cpp -O3 -o pathfinder -std=c++17 -lsfml-window -lsfml-system -lsfml-graphics`
 3. `./pathfinder`
 
-For `windows g++` (Replace <PATH_TO_SFML_SFML-2.5.1> on line 3)
+For `windows g++ via cmd` (Replace <PATH_TO_SFML_SFML-2.5.1> on line 3)
 1. `wget https://raw.githubusercontent.com/OchawinAppi/Pathfinding/master/Pathfinding/build.cpp`
 2. `SET "sfml_path=<PATH_TO_SFML_SFML-2.5.1>"` eg. SET "sfml_path=C:\Programs\SFML-2.5.1"
 3. `xcopy "%sfml_path%"\bin\*.dll .`
