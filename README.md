@@ -41,7 +41,9 @@ Clone the repository via MVC++. You must run x86. It does not work for x64.
 `LC` - Place Wall\
 `LR` - Remove wall\
 `C` - Clear\
+`V` - Generate maze\
 `Space` - Toggle Diagonal Movement
+
 
 # Pathfinding
 
