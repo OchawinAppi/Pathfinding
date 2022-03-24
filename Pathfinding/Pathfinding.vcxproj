@@ -176,7 +176,6 @@
     <ClInclude Include="Headers\mazealgo.h" />
     <ClInclude Include="Headers\prims.h" />
     <ClInclude Include="Headers\utils.h" />
-    <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
