@@ -290,4 +290,33 @@ void Grid::resetSearched()
 	resetPath();
 }
 
+void Grid::read(std::vector<sf::Vector2f>& mapInfo)
+{
+	for (int y = 1; y < MAP_HEIGHT + 1; ++y)
+	{
+		for (int x = 1; x < MAP_WIDTH + 1; ++x)
+		{
+			this->at(x, y).makeSolid();
+		}
+	}
 
+
+	for (auto& location : mapInfo)
+	{
+		this->at(location.x, location.y).makeEmpty();
+	}
+}
+
+void Grid::draw(sf::RenderWindow& window, std::vector<sf::Vector2f> path, int r, int g, int b, int a, sf::Shape&& shape, int drawCount, float scale)
+{
+	this->draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount, scale);
+}
+void Grid::draw(sf::RenderWindow& window, std::vector<sf::Vector2f> path, sf::Color color, sf::Shape&& shape, int drawCount, float scale)
+{
+	std::vector<Cell*> temp{};
+	for (auto& [x, y] : path)
+	{
+		temp.push_back(&this->at(x, y));
+	}
+	this->draw(window, temp, color, std::forward<sf::Shape>(shape), drawCount, scale);
+}

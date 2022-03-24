@@ -166,7 +166,7 @@
     <ClCompile Include="cell.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Src\prims.cpp" />
+    <ClCompile Include="prims.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\a-star-functions.h" />

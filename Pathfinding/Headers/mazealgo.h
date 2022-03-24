@@ -1,15 +1,19 @@
 #pragma once
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 class MazeAlgo
 {
 private:
 	MazeAlgo();
 protected:
-	int x, y;
-	MazeAlgo(int _x, int _y) :
-		x(_x), y(_y) {}
+	int width, height;
+	MazeAlgo(int _width, int _height) :
+		width(_width), height(_height) {}
 public:
-	virtual void generate() = 0;
+	virtual std::vector<sf::Vector2f> generate() = 0;
 };
+
+
+
 

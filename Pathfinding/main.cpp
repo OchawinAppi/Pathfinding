@@ -1,6 +1,6 @@
 #include "Headers/grid.h"
 #include "Headers/a-star-functions.h"
-
+#include "Headers/prims.h"
 
 int main()
 {
@@ -19,11 +19,9 @@ int main()
 
     int searchDrawingTime = 0;
     int pathDrawingTime = 0;
-
     while (window.isOpen())
     {
         int time = clock.restart().asMilliseconds();
-        
         if (searchDrawingTime/SEARCHED_DISPLAY_RATE < static_cast<int>(map.getSearched().size()))
         {
             searchDrawingTime += static_cast<int>(time);
@@ -60,6 +58,15 @@ int main()
                 {
                     map.resetGrid();
                     enclosedCellRoom.clear();
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::V))
+                {
+                    map.resetGrid();
+                    map.draw(window);
+                    Prims prims(MAP_WIDTH+2, MAP_HEIGHT+2);
+                    auto maze = prims.generate();
+                    map.read(maze);
+                    map.draw(window, maze, sf::Color::White, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), 0);
                 }
             }
         }
@@ -172,10 +179,12 @@ int main()
         // DRAWING
         map.draw(window);
         map.draw(window, enclosedCellRoom, 200, 200, 200, 100, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f), enclosedCellRoom.size());
-        map.draw(window, map.getSearched(), 200, 200, 200, 100, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), searchDrawingTime/ SEARCHED_DISPLAY_RATE, 0.86f);
+        map.draw(window, map.getSearched(), 220, 10, 230, 100, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), searchDrawingTime/ SEARCHED_DISPLAY_RATE, 0.86f);
         map.draw(window, path, sf::Color::Yellow, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), pathDrawingTime/ PATH_CONSTRUCTION_RATE, 0.42f);
         
         // DISPLAY
         window.display();
     }
 }
+
+

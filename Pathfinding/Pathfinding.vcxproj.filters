@@ -33,7 +33,7 @@
     <ClCompile Include="build.cpp">
       <Filter>all-in-one-package</Filter>
     </ClCompile>
-    <ClCompile Include="Src\prims.cpp">
+    <ClCompile Include="prims.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,14 +50,14 @@
     <ClInclude Include="Headers\mazealgo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\prims.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Headers\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Headers\a-star-functions.h">
       <Filter>A-Star</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\prims.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,13 +1,14 @@
 #pragma once
 #include "mazeAlgo.h"
+
 class Prims :
     public MazeAlgo
 {
+public:
+    using intVec = std::vector<int>;
     // Self defined constructor
-    Prims(int x, int y) :
-        MazeAlgo(x, y) {}
+    Prims(int x, int y);
 
     // Inherited via MazeAlgo
-    virtual void generate() override;
+    virtual std::vector<sf::Vector2f> generate() override;
 };
-

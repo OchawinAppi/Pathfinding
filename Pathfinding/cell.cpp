@@ -70,7 +70,7 @@ void Cell::draw(sf::RenderWindow &window)
 
 	if (solid)
 	{
-		tile.setFillColor(sf::Color::White);
+		tile.setFillColor(sf::Color(200, 200, 200));
 	}
 	else
 	{

@@ -28,6 +28,8 @@ public:
 	void draw(sf::RenderWindow &window);
 	void draw(sf::RenderWindow &window, std::vector<Cell*> path, sf::Color color , sf::Shape&& shape, int drawCount, float scale = 1.f);
 	void draw(sf::RenderWindow &window, std::vector<Cell*> path, int r, int g, int b, int a, sf::Shape&& shape, int drawCount, float scale = 1.f);
+	void draw(sf::RenderWindow &window, std::vector<sf::Vector2f> path, sf::Color color, sf::Shape&& shape, int drawCount, float scale = 1.f);
+	void draw(sf::RenderWindow &window, std::vector<sf::Vector2f> path, int r, int g, int b, int a, sf::Shape&& shape, int drawCount, float scale = 1.f);
 
 
 	// Getting Specific cell ( will need this later )
@@ -47,6 +49,8 @@ public:
 	void resetB();
 	void resetGrid();
 	void resetPath();
+
+	void read(std::vector<sf::Vector2f> &mapInfo);
 
 	std::vector<Cell*> getNeighbors(const sf::Vector2f& pos, bool diag);
 	sf::Vector2f &getB();

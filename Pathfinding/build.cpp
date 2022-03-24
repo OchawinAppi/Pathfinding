@@ -63,7 +63,7 @@ public:
 	void updateF() { this->F_dist = this->H_dist + this->G_dist; }
 	void setColor(sf::Color color) { this->tile.setFillColor(color); }
 	void draw(sf::RenderWindow& window) {
-		if (solid) { tile.setFillColor(sf::Color::White); }
+		if (solid) { tile.setFillColor(sf::Color(200, 200, 200)); }
 		else {
 			switch (this->c) {
 				case 'A': tile.setFillColor(sf::Color::Red); break;
@@ -134,6 +134,15 @@ public:
 	void draw(sf::RenderWindow& window, std::vector<Cell*> path, int r, int g, int b, int a, sf::Shape&& shape, int drawCount, float scale) {
 		draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount, scale);
 	}
+	void draw(sf::RenderWindow& window, std::vector<sf::Vector2f> path, int r, int g, int b, int a, sf::Shape&& shape, int drawCount, float scale = 1.f) {
+		this->draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount, scale);
+	}
+	void draw(sf::RenderWindow& window, std::vector<sf::Vector2f> path, sf::Color color, sf::Shape&& shape, int drawCount, float scale = 1.f) {
+		std::vector<Cell*> temp{};
+		for (auto& [x, y] : path) {temp.push_back(&this->at(x, y)); }
+		this->draw(window, temp, color, std::forward<sf::Shape>(shape), drawCount, scale);
+	}
+
 	inline Cell& at(int x, int y) { return *grid->at(y).at(x); }
 	inline Cell& at(const sf::Vector2i& pos) { return at(pos.x, pos.y); }
 	inline Cell& at(const sf::Vector2f& pos) { return at(static_cast<int>(pos.x), static_cast<int>(pos.y));}
@@ -184,6 +193,16 @@ public:
 				this->at(x, y).c = ' ';
 				this->at(x, y).isPath = false;
 			}
+		}
+	}
+	void read(std::vector<sf::Vector2f>& mapInfo) {
+		for (int y = 1; y < MAP_HEIGHT + 1; ++y) {
+			for (int x = 1; x < MAP_WIDTH + 1; ++x) {
+				this->at(x, y).makeSolid();
+			}
+		}
+		for (auto& location : mapInfo) {
+			this->at(location.x, location.y).makeEmpty();
 		}
 	}
 	std::vector<Cell*> getNeighbors(const sf::Vector2f& pos, bool diag) {
@@ -338,7 +357,78 @@ std::vector<Cell*> a_star(Grid& map, sf::Vector2f& start_node, sf::Vector2f& tar
 	}
 	return travelPath;
 }
+//// MAZE ALGO ////
+class MazeAlgo
+{
+private:
+	MazeAlgo();
+protected:
+	int width, height;
+	MazeAlgo(int _width, int _height) :
+		width(_width), height(_height) {}
+public:
+	virtual std::vector<sf::Vector2f> generate() = 0;
+};
 
+//// PRIMS ////
+inline int getNeighbors(std::vector<std::vector<int>>& map, int x, int y, int width, int height) {    // Gets the neighbors of a given cell, if a given neighbor cell is empty, count goes up by one. (Not a wall)
+	int count = 0;
+	if (x <= 0 || x >= width - 1 || y <= 0 || y >= height - 1) return 0; // Make sure it isn't out of bounds.
+	if (map.at(y + 1).at(x) == 0) count++;
+	if (map.at(y - 1).at(x) == 0) count++;
+	if (map.at(y).at(x + 1) == 0) count++;
+	if (map.at(y).at(x - 1) == 0) count++;
+	return count;
+}
+int clamp(int x, int min, int max) {
+	if (x > max) return max;
+	if (x < min) return min;
+	return x;
+}
+class Prims :
+	public MazeAlgo
+{
+public:
+	using intVec = std::vector<int>;
+	Prims(int width, int height) : MazeAlgo(width, height) {}
+	virtual std::vector<sf::Vector2f> generate() override
+	{
+		int& height = this->height;
+		int& width = this->width;
+		struct Pos { int x, y; };
+		std::vector<sf::Vector2f> returnPath{};
+		std::vector<intVec> map(height, intVec(width, 1));
+		srand((int)time(0));
+		int x = rand() % width;
+		srand((int)time(0));
+		int y = rand() % height;
+		x = clamp(x, 1, width);
+		y = clamp(y, 1, height);
+		map.at(y).at(x) = 0;
+		std::vector<Pos> walls;
+		walls.push_back(Pos{ x + 1, y });
+		walls.push_back(Pos{ x - 1, y });
+		walls.push_back(Pos{ x,     y + 1 });
+		walls.push_back(Pos{ x,     y - 1 });
+		returnPath.emplace_back(x, y);
+		while (walls.size() > 0) {
+			srand((int)time(0));
+			int curWall = (rand() % walls.size()); 
+			x = walls.at(curWall).x;   
+			y = walls.at(curWall).y;
+			walls.erase(walls.begin() + curWall); 
+			if (getNeighbors(map, x, y, width, height) == 1) { 
+				map.at(y).at(x) = 0;       
+				returnPath.emplace_back(x, y);
+				walls.push_back(Pos{ x + 1, y });
+				walls.push_back(Pos{ x - 1, y });
+				walls.push_back(Pos{ x, y + 1 });
+				walls.push_back(Pos{ x, y - 1 });
+			}
+		}
+		return returnPath;
+	}
+};
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Path Finding");
@@ -385,6 +475,14 @@ int main() {
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
 					map.resetGrid();
 					enclosedCellRoom.clear();
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::V))
+				{
+					map.resetGrid();
+					map.draw(window);
+					Prims prims(MAP_WIDTH + 2, MAP_HEIGHT + 2);
+					auto maze = prims.generate();
+					map.read(maze);
 				}
 			}
 		}
@@ -443,7 +541,7 @@ int main() {
 		window.clear();
 		map.draw(window);
 		map.draw(window, enclosedCellRoom, 200, 200, 200, 100, sf::CircleShape(DEFAULT_TILE_SIZE / 2.f), enclosedCellRoom.size(), 1);
-		map.draw(window, map.getSearched(), 200, 200, 200, 100, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), searchDrawingTime / SEARCHED_DISPLAY_RATE, 0.86f);
+		map.draw(window, map.getSearched(), 220, 10, 230, 100, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), searchDrawingTime / SEARCHED_DISPLAY_RATE, 0.86f);
 		map.draw(window, path, sf::Color::Yellow, sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE)), pathDrawingTime / PATH_CONSTRUCTION_RATE, 0.42f);
 		window.display();
 	}
