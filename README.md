@@ -131,4 +131,5 @@ Yeilding the path:
 |**A**|🡐|🡐|🡐|**B**|
 | | | | | |
 
-Explanation Video: To be added
+Explanation Video: ( Prerequisite: Super good attention span )
+https://drive.google.com/file/d/1UwWuxCXNYM2XXQPs8VnsmEcI0z38uXzo/view?usp=sharing
