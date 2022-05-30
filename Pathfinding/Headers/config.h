@@ -11,7 +11,7 @@ constexpr int MAP_HEIGHT = 40;
 // Tile
 constexpr float SIZE_MULTIPLIER = 1.f;
 constexpr int DECREASE_BOX_SIZE = 1;
-constexpr float DEFAULT_TILE_SIZE = static_cast<float>(static_cast<int>(WINDOW_WIDTH)/(MAP_WIDTH+2+DECREASE_BOX_SIZE) * SIZE_MULTIPLIER);
+constexpr float DEFAULT_TILE_SIZE = static_cast<int>(WINDOW_WIDTH) / (MAP_WIDTH + 2 + DECREASE_BOX_SIZE) * SIZE_MULTIPLIER;
 
 // How fast nodes are displayed ( Higher value == slower )
 constexpr int SEARCHED_DISPLAY_RATE = 1;

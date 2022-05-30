@@ -1,70 +1,79 @@
 #pragma once
 
-#include <math.h>
 #include "grid.h"
 #include <unordered_map>
 #include "utils.h"
 
 inline bool contatinsPtr(const std::vector<Cell*>& vec, Cell*& item)
 {
-	for (int i = 0; i < static_cast<int>(vec.size()); i++)
-	{
-		if (vec.at(i)==item)
-		{
-			return true;
-		}
-	}
-	return false;
+	return std::any_of(vec.begin(), vec.end(), [&](const auto& cell) { return cell == item; });
 }
 
+// Check if item exists within the vector
 template <typename T>
-inline auto contains(const std::vector<T>& vec, const T &_item)
+auto contains(const std::vector<T>& vec, const T& item)
 {
 	struct returnInfo
 	{
 		bool contains;
-		int index;
+		int  index;
 	};
 
-	for (int i = 0 ; i < static_cast<int>(vec.size()); i++)
+	for (int i = 0; i < static_cast<int>(vec.size()); i++)
 	{
-		if (vec.at(i) == _item) return returnInfo { true, i };
+		if (&vec.at(i) == &item) return returnInfo{ true, i };
 	}
-	return returnInfo{ false , -1 };
+	return returnInfo{ false, -1 };
 }
 
-auto indiscriminateSearch(Grid& map, sf::Vector2f& start_node1, char target_letter1, sf::Vector2f& start_node2, char target_letter2, bool diag)
+inline auto indiscriminateSearch(const Grid&         map,
+                                 const sf::Vector2f& startNode1,
+                                 const char          targetLetter1,
+                                 const sf::Vector2f& startNode2,
+                                 const char          targetLetter2,
+                                 const bool          diag)
 {
-	struct returnInfo
+	struct ReturnInfo
 	{
-		Cell* node;
-		char target;
+		Cell*              node;
+		char               target;
 		std::vector<Cell*> room;
 	};
 
-	std::vector<Cell*> collectedNodes1{ &map.at(start_node1) };
-	std::vector<Cell*> collectedNodes2{ &map.at(start_node2) };
-
-	Cell* current_node1 = nullptr;
-	Cell* current_node2 = nullptr;
+	std::vector collectedNodes1{ &map.at(startNode1) };
+	std::vector collectedNodes2{ &map.at(startNode2) };
 
 	int count = 0;
-	while (static_cast<int>(collectedNodes1.size()) > count && collectedNodes2.size()>count)
+	while (static_cast<int>(collectedNodes1.size()) > count && collectedNodes2.size() > static_cast<unsigned>(count))
 	{
-		current_node1 = collectedNodes1.at(count);
-		current_node2 = collectedNodes2.at(count);
+		const Cell* current_node1 = collectedNodes1.at(count);
+		const Cell* current_node2 = collectedNodes2.at(count);
 
-		if (current_node1->c == target_letter1) return returnInfo{ &map.at(start_node1), target_letter1, collectedNodes1 };
-		if (current_node2->c == target_letter2) return returnInfo{ &map.at(start_node2), target_letter2, collectedNodes2 };
+		if (current_node1->c == targetLetter1)
+			return ReturnInfo{
+				&map.at(startNode1), targetLetter1, collectedNodes1
+			};
+		if (current_node2->c == targetLetter2)
+			return ReturnInfo{
+				&map.at(startNode2), targetLetter2, collectedNodes2
+			};
 
 
 		// First one
 		const auto& neighbors1 = map.getNeighbors(current_node1->pos, diag);
-		if (neighbors1.size() == 0) returnInfo{ &map.at(start_node1), target_letter1, collectedNodes1 };
-		
+
+		if (neighbors1.size() == static_cast<unsigned>(0))
+			return ReturnInfo{
+				&map.at(startNode1), targetLetter1, collectedNodes1
+			};
+
 		// Second one
 		const auto& neighbors2 = map.getNeighbors(current_node2->pos, diag);
-		if (neighbors2.size() == 0) returnInfo{ &map.at(start_node2), target_letter2, collectedNodes2 };
+
+		if (neighbors2.size() == static_cast<unsigned>(0))
+			return ReturnInfo{
+				&map.at(startNode2), targetLetter2, collectedNodes2
+			};
 
 		for (auto* neighbor : neighbors1)
 		{
@@ -80,21 +89,21 @@ auto indiscriminateSearch(Grid& map, sf::Vector2f& start_node1, char target_lett
 		++count;
 	}
 
-	if (collectedNodes1.size() <= count)
-		return returnInfo{ &map.at(start_node1), target_letter1, collectedNodes1 };
-	else
-		return returnInfo{ &map.at(start_node2), target_letter2, collectedNodes2 };
-
+	if (collectedNodes1.size() <= static_cast<unsigned>(count))
+		return ReturnInfo{ &map.at(startNode1), targetLetter1, collectedNodes1 };
+	return ReturnInfo{ &map.at(startNode2), targetLetter2, collectedNodes2 };
 }
 
 
 // Note, for simplicity, we covert 1.0 and 1.4 to 10 and 14. We hate decimals.
-inline int heuristic(sf::Vector2f &node, sf::Vector2f &target) {
+inline int heuristic(const sf::Vector2f& node, const sf::Vector2f& target)
+{
 	int x_dist = static_cast<int>(abs(node.x - target.x));
 	int y_dist = static_cast<int>(abs(node.y - target.y));
 
 	int distance = 0;
-	while (x_dist >= 1 && y_dist >= 1) {
+	while (x_dist >= 1 && y_dist >= 1)
+	{
 		x_dist--;
 		y_dist--;
 		distance += 14;
@@ -104,25 +113,25 @@ inline int heuristic(sf::Vector2f &node, sf::Vector2f &target) {
 	return distance;
 }
 
-std::vector<Cell*> a_star(Grid& map, sf::Vector2f &start_node, sf::Vector2f &target_node, bool diag)
+inline std::vector<Cell*> aStar(Grid&      map, const sf::Vector2f& startNode, const sf::Vector2f& targetNode,
+                                const bool diag)
 {
 	map.resetSearched();
-	map.at(start_node).updateG(0);
-	map.at(start_node).updateH(heuristic(start_node, target_node));
-	map.at(start_node).updateF();
+	map.at(startNode).updateG(0);
+	map.at(startNode).updateH(heuristic(startNode, targetNode));
+	map.at(startNode).updateF();
 
-	std::vector<Cell*> open_nodes{ &map.at(start_node) };
+	std::vector        open_nodes{ &map.at(startNode) };
 	std::vector<Cell*> closed_nodes{};
 
-	std::unordered_map<Cell*, Cell*> travelMap;
-	std::vector<Cell*> travelPath{};
-
+	std::unordered_map<Cell*, Cell*> travel_map;
+	std::vector<Cell*>               travel_path{};
 
 	Cell* current_node = nullptr;
 
 	bool quit = false;
 
-	while (open_nodes.size() > 0 && !quit)
+	while (!open_nodes.empty() && !quit)
 	{
 		current_node = open_nodes.at(0);
 		int current_node_index = 0;
@@ -133,27 +142,26 @@ std::vector<Cell*> a_star(Grid& map, sf::Vector2f &start_node, sf::Vector2f &tar
 			auto* temp_node = open_nodes.at(i);
 
 			// Check for greater f_cost, if there are nodes with same f_cost, check h_cost.
-			if (temp_node->F_dist < current_node->F_dist)
+			if (temp_node->f_dist < current_node->f_dist)
 			{
 				current_node = temp_node;
-				current_node_index = i;
+				current_node_index = static_cast<int>(i);
 			}
-			else if (temp_node->F_dist == current_node->F_dist)
+			else if (temp_node->f_dist == current_node->f_dist)
 			{
-				if (temp_node->H_dist < current_node->H_dist)
+				if (temp_node->h_dist < current_node->h_dist)
 				{
 					current_node = temp_node;
-					current_node_index = i;
+					current_node_index = static_cast<int>(i);
 				}
 			}
 		}
 		map.addSearched(current_node);
-	
-		if ((current_node->pos.x == target_node.x) && (current_node->pos.y == target_node.y))
+
+		if (current_node->pos == targetNode)
 		{
 			break;
 		}
-		
 
 		// Erase the node from the pool.
 		open_nodes.erase(open_nodes.begin() + current_node_index);
@@ -165,49 +173,46 @@ std::vector<Cell*> a_star(Grid& map, sf::Vector2f &start_node, sf::Vector2f &tar
 		for (auto* neighbor : map.getNeighbors(current_node->pos, diag))
 		{
 			// If the target node is a neighbor, it's done.  
-			quit = (*neighbor == map.at(target_node));
+			quit = *neighbor == map.at(targetNode);
 
 			// Skip neighbors which have been evaluated.
 			if (contatinsPtr(closed_nodes, neighbor)) continue;
-		
+
 			// new_travel_cost = cost_so_far + cost_from_current_to_neighbor
-			const int new_g_cost = current_node->G_dist + heuristic(current_node->pos, neighbor->pos);
-			
+			const int new_g_cost = current_node->g_dist + heuristic(current_node->pos, neighbor->pos);
+
 			// Check if neighbor exists within the pool (not evaluated)
-			bool inOpen = contatinsPtr(open_nodes, neighbor);
+			const bool inOpen = contatinsPtr(open_nodes, neighbor);
 
 			// If node DNE in pool, add
 			// If node exists and g_cost is cheaper, update.
-			if (new_g_cost < neighbor->G_dist || !inOpen)
+			if (new_g_cost < neighbor->g_dist || !inOpen)
 			{
 				neighbor->updateG(new_g_cost);
-				neighbor->updateH(heuristic(neighbor->pos, target_node));
+				neighbor->updateH(heuristic(neighbor->pos, targetNode));
 				neighbor->updateF();
 
 				if (!inOpen) open_nodes.push_back(neighbor);
 
 				// nodeTravledTo = nodeTraveledFrom, we will have a chain of these in the end.
-				travelMap[neighbor] = current_node;
-			
+				travel_map[neighbor] = current_node;
 			}
 			//log(neighbor->pos.x, neighbor->pos.y, neighbor->F_dist, neighbor->G_dist);
 		}
 	}
-	
+
 	// BACKTRACK
-	Cell* next = &map.at(target_node);
-	
+	Cell* next = &map.at(targetNode);
+
 	// Just checking while the next parent node exists.
-	while (travelMap.count(next))
+	while (travel_map.count(next))
 	{
-		next = travelMap[next];
-		next->isPath = true;
-		if (*next != map.at(start_node))
+		next = travel_map[next];
+		next->is_path = true;
+		if (*next != map.at(startNode))
 		{
-			travelPath.push_back(next);
+			travel_path.push_back(next);
 		}
 	}
-	return travelPath;
+	return travel_path;
 }
-
-

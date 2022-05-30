@@ -1,70 +1,87 @@
+#include <utility>
+
 #include "Headers/grid.h"
 
 
 // Constructor
-Grid::Grid(int x, int y)
+Grid::Grid(int x,
+           int y)
 {
-	grid = std::unique_ptr<std::vector<CellPtrVec>>(new std::vector<CellPtrVec>());
+	grid = std::make_unique<std::vector<CellPtrVec>>();
 
 	x += 2;
 	y += 2;
-	for (int i = 0; i < static_cast<int>(y); ++i) {
+	for (int i = 0; i < y; ++i)
+	{
 		grid->push_back({});
-		for (int j = 0; j < static_cast<int>(x); ++j) {
-			if (i == 0 || i == y - 1 || j == 0 || j == x - 1) {
+		for (int j = 0; j < x; ++j)
+		{
+			if (i == 0 || i == y - 1 || j == 0 || j == x - 1)
+			{
 				grid->at(i).push_back(std::make_unique<Cell>(0, 0, true, j, i));
 			}
-			else {
+			else
+			{
 				grid->at(i).push_back(std::make_unique<Cell>(0, 0, false, j, i));
 			}
 		}
 	}
-	grid = std::move(grid);
-	aPos = sf::Vector2f(-1, -1);
-	bPos = sf::Vector2f(-1, -1);
+	aPos = sf::Vector2f(-1.f, -1.f);
+	bPos = sf::Vector2f(-1.f, -1.f);
 }
 
 
 // Methods 
 
 // Displaying
-void Grid::print()
+void Grid::print() const
 {
-	for (int i = 0; i < static_cast<int>(grid->size()); i++) {
-		for (int j = 0; j < static_cast<int>(grid->at(0).size()); j++) {
+	for (int i = 0; i < static_cast<int>(grid->size()); i++)
+	{
+		for (int j = 0; j < static_cast<int>(grid->at(0).size()); j++)
+		{
 			std::cout << *grid->at(i).at(j);
-
 		}
 		std::cout << "\n";
 	}
 }
 
 // Overloading cout op
-std::ostream& operator<<(std::ostream& os, const Grid& map)
+std::ostream& operator<<(std::ostream& os,
+                         const Grid&   grid)
 {
-	for (int i = 0; i < static_cast<int>(map.grid->size()); i++) {
-		for (int j = 0; j < static_cast<int>(map.grid->at(0).size()); j++) {
-			os << map.grid->at(i).at(j);
+	for (int i = 0; i < static_cast<int>(grid.grid->size()); i++)
+	{
+		for (int j = 0; j < static_cast<int>(grid.grid->at(0).size()); j++)
+		{
+			os << grid.grid->at(i).at(j);
 		}
 		os << "\n";
 	}
 	return os;
 }
 
-void Grid::draw(sf::RenderWindow& window)
+void Grid::draw(sf::RenderWindow& window) const
 {
-	for (int y = 0; y < static_cast<int>(grid->size()); y++) {
-		for (int x = 0; x < static_cast<int>(grid->at(0).size()); x++) {
+	for (int y = 0; y < static_cast<int>(grid->size()); y++)
+	{
+		for (int x = 0; x < static_cast<int>(grid->at(0).size()); x++)
+		{
 			grid->at(y).at(x)->draw(window);
 		}
 	}
 }
 
-void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, sf::Color color, sf::Shape &&shape, int drawCount, float scale)
+void Grid::draw(sf::RenderWindow&         window,
+                const std::vector<Cell*>& path,
+                const sf::Color           color,
+                sf::Shape&&               shape,
+                const int                 drawCount,
+                const float               scale)
 {
-	sf::Vector2f newScale(scale, scale);
+	const sf::Vector2f newScale(scale, scale);
 
-	float delta = (static_cast<float>(DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE * scale)/2;
+	const float delta = (static_cast<float>(DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE * scale) / 2;
 
 	shape.setFillColor(color);
 	int count = 0;
@@ -79,34 +96,46 @@ void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, sf::Color col
 	}
 }
 
-void Grid::draw(sf::RenderWindow& window, std::vector<Cell*> path, int r, int g, int b, int a, sf::Shape&& shape, int drawCount, float scale)
+void Grid::draw(sf::RenderWindow&         window,
+                const std::vector<Cell*>& path,
+                const sf::Uint8           r,
+                const sf::Uint8           g,
+                const sf::Uint8           b,
+                const sf::Uint8           a,
+                sf::Shape&&               shape,
+                const int                 drawCount,
+                const float               scale) const
 {
 	draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount, scale);
 }
 
 
 // Getting Specific cell ( will need this later )
-inline Cell& Grid::at(int x, int y)
+inline Cell& Grid::at(int x,
+                      int y) const
 {
 	return *grid->at(y).at(x);
 }
 
-Cell& Grid::at(const sf::Vector2i& pos)
+Cell& Grid::at(const sf::Vector2i& pos) const
 {
 	return at(pos.x, pos.y);
 }
 
-Cell& Grid::at(const sf::Vector2f& pos)
+Cell& Grid::at(const sf::Vector2f& pos) const
 {
 	return at(static_cast<int>(pos.x), static_cast<int>(pos.y));
 }
 
-bool Grid::inBounds(int x, int x_size, int y, int y_size) 
+bool Grid::inBounds(int x,
+                    int x_size,
+                    int y,
+                    int y_size)
 {
-	return (x > 0 && x < x_size) && (y > 0 && y < y_size);
+	return x > 0 && x < x_size && (y > 0 && y < y_size);
 }
 
-void Grid::initA(const sf::Vector2f &pos)
+void Grid::initA(const sf::Vector2f& pos)
 {
 	aPos = sf::Vector2f(pos);
 	at(pos).c = 'A';
@@ -118,12 +147,12 @@ void Grid::initB(const sf::Vector2f& pos)
 	at(pos).c = 'B';
 }
 
-bool Grid::moveA(const sf::Vector2f &pos)
+bool Grid::moveA(const sf::Vector2f& pos)
 {
 	// Shortcircuting
 	if (!at(pos).solid && at(pos).c == ' ')
 	{
-		if (aPos.x == -1)
+		if (aPos.x == -1.f)
 		{
 			initA(pos);
 			return true;
@@ -137,12 +166,12 @@ bool Grid::moveA(const sf::Vector2f &pos)
 	return false;
 }
 
-bool Grid::moveB(const sf::Vector2f &pos)
+bool Grid::moveB(const sf::Vector2f& pos)
 {
 	// Shortcircuting
-	if (!at(pos).solid && at(pos).c==' ')
+	if (!at(pos).solid && at(pos).c == ' ')
 	{
-		if (bPos.x == -1)
+		if (bPos.x == -1.f)
 		{
 			initB(pos);
 			return true;
@@ -158,7 +187,7 @@ bool Grid::moveB(const sf::Vector2f &pos)
 
 bool Grid::canRoute()
 {
-	return this->getA().x != -1 && this->getB().x != -1;
+	return this->getA().x != -1.f && this->getB().x != -1.f;
 }
 
 void Grid::resetA()
@@ -173,13 +202,13 @@ void Grid::resetB()
 	bPos.y = -1;
 }
 
-void Grid::resetPath()
+void Grid::resetPath() const
 {
 	for (int y = 1; y < MAP_HEIGHT + 1; ++y)
 	{
 		for (int x = 1; x < MAP_WIDTH + 1; ++x)
 		{
-			this->at(x, y).isPath = false;
+			this->at(x, y).is_path = false;
 		}
 	}
 }
@@ -188,35 +217,35 @@ void Grid::resetGrid()
 {
 	resetA();
 	resetB();
-	
-	for (int y = 1; y < MAP_HEIGHT+1; ++y)
+
+	for (int y = 1; y < MAP_HEIGHT + 1; ++y)
 	{
-		for (int x = 1; x < MAP_WIDTH+1; ++x)
+		for (int x = 1; x < MAP_WIDTH + 1; ++x)
 		{
-			this->at(x, y).F_dist = 0;
-			this->at(x, y).G_dist = 0;
-			this->at(x, y).H_dist = 0;
+			this->at(x, y).f_dist = 0;
+			this->at(x, y).g_dist = 0;
+			this->at(x, y).h_dist = 0;
 			this->at(x, y).solid = false;
 			this->at(x, y).c = ' ';
-			this->at(x, y).isPath = false;
+			this->at(x, y).is_path = false;
 		}
 	}
 }
 
 
-std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos, bool diag)
+std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f& pos, const bool diag) const
 {
-	int x{ static_cast<int>(pos.x) };
-	int y{ static_cast<int>(pos.y) };
+	const int x{ static_cast<int>(pos.x) };
+	const int y{ static_cast<int>(pos.y) };
 
 	std::vector<Cell*> neighbors{};
 
 
 	if (diag)
 	{
-		for (int _x = x - 1; _x < x + 2;++ _x)
+		for (int _x = x - 1; _x < x + 2; ++ _x)
 		{
-			if (!(_x == x) && this->inBounds(_x, MAP_WIDTH+1, y, MAP_HEIGHT+1))
+			if (!(_x == x) && this->inBounds(_x, MAP_WIDTH + 1, y, MAP_HEIGHT + 1))
 			{
 				if (Cell* cell = &at(_x, y); !cell->solid)
 				{
@@ -227,7 +256,7 @@ std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos, bool diag)
 
 		for (int _y = y - 1; _y < y + 2; ++_y)
 		{
-			if (!(_y == y) && this->inBounds(x, MAP_WIDTH+1, _y, MAP_HEIGHT+1))
+			if (!(_y == y) && this->inBounds(x, MAP_WIDTH + 1, _y, MAP_HEIGHT + 1))
 			{
 				if (Cell* cell = &at(x, _y); !cell->solid)
 				{
@@ -242,14 +271,12 @@ std::vector<Cell*> Grid::getNeighbors(const sf::Vector2f &pos, bool diag)
 	{
 		for (int _y = y - 1; _y < y + 2; _y++)
 		{
-			if (!(_x == x && _y == y) && this->inBounds(_x, MAP_WIDTH+1, _y, MAP_HEIGHT+1))
+			if (!(_x == x && _y == y) && this->inBounds(_x, MAP_WIDTH + 1, _y, MAP_HEIGHT + 1))
 			{
 				if (Cell* cell = &at(_x, _y); !cell->solid)
 				{
-
 					neighbors.push_back(cell);
 				}
-		
 			}
 		}
 	}
@@ -268,10 +295,12 @@ sf::Vector2f& Grid::getA()
 
 inline sf::Vector2f Grid::offsetPosition(const sf::Vector2f& position)
 {
-	return sf::Vector2f(
-		(position.x * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_WIDTH) / 2) - (MAP_WIDTH / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
-		(position.y * DEFAULT_TILE_SIZE) + (static_cast<float>(WINDOW_HEIGHT) / 2) - (MAP_HEIGHT / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
-	);
+	return {
+		position.x * DEFAULT_TILE_SIZE + static_cast<float>(WINDOW_WIDTH) / 2.f - MAP_WIDTH / 2.f * DEFAULT_TILE_SIZE -
+		DEFAULT_TILE_SIZE,
+		position.y * DEFAULT_TILE_SIZE + static_cast<float>(WINDOW_HEIGHT) / 2.f - MAP_HEIGHT / 2.f * DEFAULT_TILE_SIZE
+		- DEFAULT_TILE_SIZE
+	};
 }
 
 std::vector<Cell*>& Grid::getSearched()
@@ -290,7 +319,7 @@ void Grid::resetSearched()
 	resetPath();
 }
 
-void Grid::read(std::vector<sf::Vector2f>& mapInfo)
+void Grid::read(const std::vector<sf::Vector2i>& mapInfo) const
 {
 	for (int y = 1; y < MAP_HEIGHT + 1; ++y)
 	{
@@ -301,17 +330,31 @@ void Grid::read(std::vector<sf::Vector2f>& mapInfo)
 	}
 
 
-	for (auto& location : mapInfo)
+	for (const auto& location : mapInfo)
 	{
 		this->at(location.x, location.y).makeEmpty();
 	}
 }
 
-void Grid::draw(sf::RenderWindow& window, std::vector<sf::Vector2f> path, int r, int g, int b, int a, sf::Shape&& shape, int drawCount, float scale)
+void Grid::draw(sf::RenderWindow&         window,
+                std::vector<sf::Vector2i> path,
+                sf::Uint8                 r,
+                sf::Uint8                 g,
+                sf::Uint8                 b,
+                sf::Uint8                 a,
+                sf::Shape&&               shape,
+                int                       drawCount,
+                float                     scale) const
 {
-	this->draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount, scale);
+	this->draw(window, std::move(path), sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount, scale);
 }
-void Grid::draw(sf::RenderWindow& window, std::vector<sf::Vector2f> path, sf::Color color, sf::Shape&& shape, int drawCount, float scale)
+
+void Grid::draw(sf::RenderWindow&                window,
+                const std::vector<sf::Vector2i>& path,
+                sf::Color                        color,
+                sf::Shape&&                      shape,
+                int                              drawCount,
+                float                            scale) const
 {
 	std::vector<Cell*> temp{};
 	for (auto& [x, y] : path)

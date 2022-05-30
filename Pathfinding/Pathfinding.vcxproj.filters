@@ -30,9 +30,6 @@
     <ClCompile Include="grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="build.cpp">
-      <Filter>all-in-one-package</Filter>
-    </ClCompile>
     <ClCompile Include="prims.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

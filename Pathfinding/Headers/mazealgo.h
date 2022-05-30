@@ -8,12 +8,15 @@ private:
 	MazeAlgo();
 protected:
 	int width, height;
-	MazeAlgo(int _width, int _height) :
-		width(_width), height(_height) {}
+
+	MazeAlgo(const int width,
+	         const int height)
+		: width(width)
+		, height(height)
+	{
+	}
+
 public:
-	virtual std::vector<sf::Vector2f> generate() = 0;
+	virtual                           ~MazeAlgo() = default;
+	virtual std::vector<sf::Vector2i> generate() = 0;
 };
-
-
-
-

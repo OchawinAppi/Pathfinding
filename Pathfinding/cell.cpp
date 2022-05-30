@@ -1,43 +1,38 @@
 #include "Headers/cell.h"
 
-Cell::Cell() 
+Cell::Cell()
+	: g_dist(-1)
+	, h_dist(-1)
+	, f_dist(-1)
+	, is_path(false)
+	, pos(-1.f, -1.f)
+	, solid(false)
+	, c(' ')
+	, tile({})
 {
-	G_dist = -1;
-	H_dist = -1;
-	F_dist = -1;
-
-	pos = sf::Vector2f(-1, -1);
-
-	c = ' ';
-	solid = false;
-
-	// SFML
-	tile = sf::RectangleShape{};
 }
 
-Cell::Cell(int g, int h, bool _solid, int _x, int _y) :
-	G_dist(g), H_dist(h), solid(_solid)
+Cell::Cell(int g, int h, bool solid, int x, int y)
+	: g_dist(g)
+	, h_dist(h)
+	, f_dist(g_dist + h_dist)
+	, is_path(false)
+	, pos(static_cast<float>(x), static_cast<float>(y))
+	, solid(solid)
+	, c(solid ? '#' : ' ')
+	, tile({ DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE })
 {
-	F_dist = G_dist + H_dist;
-	
-	c = (solid) ? '#' : ' ';
-
-	pos = sf::Vector2f(
-		static_cast<float>(_x), 
-		static_cast<float>(_y)
-	);
-
-	tile = sf::RectangleShape(sf::Vector2f(DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE));
-
 	// Note: Multiply by 
-	tile.setPosition( 
-		(pos.x * DEFAULT_TILE_SIZE) + ((float)WINDOW_WIDTH / 2) - (MAP_WIDTH/2.*DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE,
-		(pos.y * DEFAULT_TILE_SIZE) + ((float)WINDOW_HEIGHT / 2) - (MAP_HEIGHT / 2. * DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE
+	tile.setPosition(
+		pos.x * DEFAULT_TILE_SIZE + static_cast<float>(WINDOW_WIDTH) / 2 - MAP_WIDTH / 2.f * DEFAULT_TILE_SIZE -
+		DEFAULT_TILE_SIZE,
+		pos.y * DEFAULT_TILE_SIZE + static_cast<float>(WINDOW_HEIGHT) / 2 - MAP_HEIGHT / 2.f * DEFAULT_TILE_SIZE -
+		DEFAULT_TILE_SIZE
 	);
 }
 
 
-void Cell::makeSolid() 
+void Cell::makeSolid()
 {
 	this->solid = true;
 	this->c = '#';
@@ -49,25 +44,23 @@ void Cell::makeEmpty()
 	this->c = ' ';
 }
 
-void Cell::updateG(int n) 
+void Cell::updateG(const int n)
 {
-	this->G_dist = n;
+	this->g_dist = n;
 }
 
-void Cell::updateH(int n) 
+void Cell::updateH(const int n)
 {
-	this->H_dist = n;
+	this->h_dist = n;
 }
 
-void Cell::updateF() 
+void Cell::updateF()
 {
-	this->F_dist = this->H_dist + this->G_dist;
+	this->f_dist = this->h_dist + this->g_dist;
 }
 
-
-void Cell::draw(sf::RenderWindow &window)
+void Cell::draw(sf::RenderWindow& window)
 {
-
 	if (solid)
 	{
 		tile.setFillColor(sf::Color(200, 200, 200));
@@ -76,31 +69,32 @@ void Cell::draw(sf::RenderWindow &window)
 	{
 		switch (this->c)
 		{
-		case 'A': tile.setFillColor(sf::Color::Red); break;
-		case 'B': tile.setFillColor(sf::Color::Blue); break;
+		case 'A': tile.setFillColor(sf::Color::Red);
+			break;
+		case 'B': tile.setFillColor(sf::Color::Blue);
+			break;
 		default: tile.setFillColor(sf::Color::Black);
 		}
 	}
 	window.draw(tile);
 }
 
-void Cell::setColor(sf::Color color)
+void Cell::setColor(const sf::Color color)
 {
 	this->tile.setFillColor(color);
 }
 
 bool Cell::operator==(const Cell& other) const
 {
-	return this->pos.x == other.pos.x && this->pos.y == other.pos.y;
+	return this->pos == other.pos;
 }
 
 bool Cell::operator!=(const Cell& other) const
 {
-	return this->pos.x != other.pos.x || this->pos.y != other.pos.y;;
+	return this != &other ;
 }
 
 std::ostream& operator<<(std::ostream& os, const Cell& cell)
 {
 	return os << cell.c;
 }
-
