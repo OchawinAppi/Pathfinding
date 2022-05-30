@@ -41,7 +41,9 @@ Clone the repository via MVC++. You must run x86. It does not work for x64.
 `LC` - Place Wall\
 `LR` - Remove wall\
 `C` - Clear\
+`V` - Generate maze\
 `Space` - Toggle Diagonal Movement
+
 
 # Pathfinding
 
@@ -129,4 +131,5 @@ Yeilding the path:
 |**A**|🡐|🡐|🡐|**B**|
 | | | | | |
 
-Explanation Video: To be added
+Explanation Video: ( Prerequisite: Super good attention span )
+https://drive.google.com/file/d/1UwWuxCXNYM2XXQPs8VnsmEcI0z38uXzo/view?usp=sharing
