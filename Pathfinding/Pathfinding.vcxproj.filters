@@ -33,6 +33,9 @@
     <ClCompile Include="prims.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="build.cpp">
+      <Filter>all-in-one-package</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\cell.h">

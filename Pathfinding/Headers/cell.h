@@ -21,7 +21,6 @@ public:
 	// Constructors, Destructor
 	Cell();
 	Cell(int g, int h, bool solid, int x, int y);
-	~Cell() = default;
 
 	// Methods
 	void makeSolid();

@@ -61,53 +61,6 @@ std::ostream& operator<<(std::ostream& os,
 	return os;
 }
 
-void Grid::draw(sf::RenderWindow& window) const
-{
-	for (int y = 0; y < static_cast<int>(grid->size()); y++)
-	{
-		for (int x = 0; x < static_cast<int>(grid->at(0).size()); x++)
-		{
-			grid->at(y).at(x)->draw(window);
-		}
-	}
-}
-
-void Grid::draw(sf::RenderWindow&         window,
-                const std::vector<Cell*>& path,
-                const sf::Color           color,
-                sf::Shape&&               shape,
-                const int                 drawCount,
-                const float               scale)
-{
-	const sf::Vector2f newScale(scale, scale);
-
-	const float delta = (static_cast<float>(DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE * scale) / 2;
-
-	shape.setFillColor(color);
-	int count = 0;
-	for (const auto& tile : path)
-	{
-		if (drawCount == count++) return;
-		if (tile->c != ' ' || tile->solid) continue;
-		shape.setScale(newScale);
-		shape.setPosition(offsetPosition(tile->pos));
-		shape.move(sf::Vector2f(delta, delta));
-		window.draw(shape);
-	}
-}
-
-void Grid::draw(sf::RenderWindow&         window,
-                const std::vector<Cell*>& path,
-                const sf::Uint8           r,
-                const sf::Uint8           g,
-                const sf::Uint8           b,
-                const sf::Uint8           a,
-                sf::Shape&&               shape,
-                const int                 drawCount,
-                const float               scale) const
-{
-	draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount, scale);
-}
 
 
 // Getting Specific cell ( will need this later )
@@ -336,17 +289,67 @@ void Grid::read(const std::vector<sf::Vector2i>& mapInfo) const
 	}
 }
 
-void Grid::draw(sf::RenderWindow&         window,
-                std::vector<sf::Vector2i> path,
-                sf::Uint8                 r,
-                sf::Uint8                 g,
-                sf::Uint8                 b,
-                sf::Uint8                 a,
-                sf::Shape&&               shape,
-                int                       drawCount,
-                float                     scale) const
+void Grid::draw(sf::RenderWindow& window) const
 {
-	this->draw(window, std::move(path), sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount, scale);
+	for (int y = 0; y < static_cast<int>(grid->size()); y++)
+	{
+		for (int x = 0; x < static_cast<int>(grid->at(0).size()); x++)
+		{
+			grid->at(y).at(x)->draw(window);
+		}
+	}
+}
+
+void Grid::draw(sf::RenderWindow& window,
+	const std::vector<Cell*>& path,
+	const sf::Color           color,
+	sf::Shape&& shape,
+	const int                 drawCount,
+	const float               scale)
+{
+	const sf::Vector2f newScale(scale, scale);
+
+	const float delta = (static_cast<float>(DEFAULT_TILE_SIZE) - DEFAULT_TILE_SIZE * scale) / 2;
+
+	shape.setFillColor(color);
+	int count = 0;
+	for (const auto& tile : path)
+	{
+		if (drawCount == count++) return;
+		if (tile->c != ' ' || tile->solid) continue;
+		shape.setScale(newScale);
+		shape.setPosition(offsetPosition(tile->pos));
+		shape.move(sf::Vector2f(delta, delta));
+		window.draw(shape);
+	}
+}
+
+void Grid::draw(sf::RenderWindow& window,
+	const std::vector<Cell*>& path,
+	const sf::Uint8           r,
+	const sf::Uint8           g,
+	const sf::Uint8           b,
+	const sf::Uint8           a,
+	sf::Shape&& shape,
+	const int                 drawCount,
+	const float               scale) const
+{
+	draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount, scale);
+}
+
+
+
+void Grid::draw(sf::RenderWindow&                window,
+                const std::vector<sf::Vector2i>& path,
+                sf::Uint8                        r,
+                sf::Uint8                        g,
+                sf::Uint8                        b,
+                sf::Uint8                        a,
+                sf::Shape&&                      shape,
+                int                              drawCount,
+                float                            scale) const
+{
+	this->draw(window, path, sf::Color(r, g, b, a), std::forward<sf::Shape>(shape), drawCount, scale);
 }
 
 void Grid::draw(sf::RenderWindow&                window,

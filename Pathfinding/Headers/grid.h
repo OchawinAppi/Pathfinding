@@ -2,7 +2,7 @@
 #include "cell.h"
 
 
-class Grid
+class Grid final
 {
 private:
 	using CellPtr = std::unique_ptr<Cell>;
@@ -18,7 +18,6 @@ public:
 	// Constructor
 	Grid(int x,
 	     int y);
-	virtual ~Grid() = default;
 	// Destructor not needed. The compiler got this. ;) ( probably )
 
 	// Displaying - Console
@@ -49,22 +48,22 @@ public:
 	          sf::Shape&&                      shape,
 	          int                              drawCount,
 	          float                            scale = 1.f) const;
-	void draw(sf::RenderWindow&         window,
-	          std::vector<sf::Vector2i> path,
-	          sf::Uint8                 r,
-	          sf::Uint8                 g,
-	          sf::Uint8                 b,
-	          sf::Uint8                 a,
-	          sf::Shape&&               shape,
-	          int                       drawCount,
-	          float                     scale = 1.f) const;
+	void draw(sf::RenderWindow&                window,
+	          const std::vector<sf::Vector2i>& path,
+	          sf::Uint8                        r,
+	          sf::Uint8                        g,
+	          sf::Uint8                        b,
+	          sf::Uint8                        a,
+	          sf::Shape&&                      shape,
+	          int                              drawCount,
+	          float                            scale = 1.f) const;
 
 
 	// Getting Specific cell ( will need this later )
-	inline Cell& at(int x,
-	                int y) const;
-	Cell& at(const sf::Vector2f& pos) const;
-	Cell& at(const sf::Vector2i& pos) const;
+	[[nodiscard]] inline Cell& at(int x,
+	                              int y) const;
+	[[nodiscard]] Cell& at(const sf::Vector2f& pos) const;
+	[[nodiscard]] Cell& at(const sf::Vector2i& pos) const;
 
 	static bool inBounds(int x,
 	                     int x_size,

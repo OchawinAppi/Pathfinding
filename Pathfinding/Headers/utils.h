@@ -5,12 +5,12 @@
 
 inline sf::Vector2i vfToVi(const sf::Vector2f &vec)
 {
-	return sf::Vector2i(static_cast<int>(vec.x), static_cast<int>(vec.y));
+	return { static_cast<int>(vec.x), static_cast<int>(vec.y) };
 }
 
 inline sf::Vector2f viToVf(const sf::Vector2i &vec)
 {
-	return sf::Vector2f(static_cast<float>(vec.x), static_cast<float>(vec.y));
+	return { static_cast<float>(vec.x), static_cast<float>(vec.y) };
 }
 
 inline bool isAnyKeyPressed()
@@ -40,7 +40,8 @@ constexpr void log(Args&& ... args)
 
 inline sf::Vector2f offset(const sf::Vector2f& pos)
 {
-	return sf::Vector2f(
+	return {
 		pos.x * DEFAULT_TILE_SIZE + static_cast<float>(MAP_WIDTH) / 2 - MAP_WIDTH / 2.f * DEFAULT_TILE_SIZE - DEFAULT_TILE_SIZE,
-		pos.y * DEFAULT_TILE_SIZE + static_cast<float>(WINDOW_HEIGHT) / 2 - MAP_HEIGHT / 2.f * DEFAULT_TILE_SIZE - DEFAULT_TILE_SIZE);
+		pos.y * DEFAULT_TILE_SIZE + static_cast<float>(WINDOW_HEIGHT) / 2 - MAP_HEIGHT / 2.f * DEFAULT_TILE_SIZE - DEFAULT_TILE_SIZE
+	};
 }
